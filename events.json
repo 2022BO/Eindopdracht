@@ -1,0 +1,113 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Ignacio Doe",
+      "image": "https://global-uploads.webflow.com/5eecfecbe625d195e35b89f2/624bfb093da7d92733c001c0_Ignacio%20Villafruela%20Rodr%C3%ADguez.jpg",
+      "educationLevel": "HBO"
+    },
+    {
+      "id": 2,
+      "name": "Jane Bennett",
+      "image": "https://global-uploads.webflow.com/5eecfecbe625d195e35b89f2/624bfb401d7131c760ca1c63_Elieska%20Lensink.jpg",
+      "educationLevel": "WO"
+    },
+    {
+      "id": 3,
+      "name": "John Smith",
+      "image": "https://example.com/john_smith.jpg",
+      "educationLevel": "MBO"
+    },
+    {
+      "id": 4,
+      "name": "Alice Johnson",
+      "image": "https://example.com/alice_johnson.jpg",
+      "educationLevel": "HBO"
+    },
+    {
+      "id": 5,
+      "name": "David Lee",
+      "image": "https://example.com/david_lee.jpg",
+      "educationLevel": "WO"
+    }
+  ],
+  "courses": [
+    {
+      "id": 1,
+      "title": "Inleiding tot Cognitieve Gedragstherapie",
+      "description": "Leer de basis van Cognitieve Gedragstherapie en de toepassing ervan in de geestelijke gezondheidszorg.",
+      "image": "https://example.com/cbt_image.jpg",
+      "categoryIds": [3],
+      "level": "Beginner",
+      "department": "Leren en Ontwikkelen"
+    },
+    {
+      "id": 2,
+      "title": "Mindfulness Meditatie",
+      "description": "Ontdek de voordelen van mindfulness voor geestelijk welzijn.",
+      "image": "https://example.com/mindfulness_image.jpg",
+      "categoryIds": [3],
+      "level": "Gevorderd",
+      "department": "Leren en Ontwikkelen"
+    },
+    {
+      "id": 3,
+      "title": "Basics van Kinderpsychologie",
+      "description": "Begrijp de fundamenten van kinderpsychologie voor het werken met jongeren.",
+      "image": "https://example.com/child_psychology_image.jpg",
+      "categoryIds": [3],
+      "level": "Gevorderd",
+      "department": "Leren en Ontwikkelen"
+    },
+    {
+      "id": 4,
+      "title": "Stressbeheer bij Ouderen",
+      "description": "Verken strategieën voor stressbeheer bij ouderen.",
+      "image": "https://example.com/stress_management_image.jpg",
+      "categoryIds": [3],
+      "level": "Gevorderd",
+      "department": "Leren en Ontwikkelen"
+    },
+    {
+      "id": 5,
+      "title": "Basisprincipes van Verslavingszorg",
+      "description": "Krijg inzicht in de basisprincipes van verslavingszorg en behandeling.",
+      "image": "https://example.com/addiction_counseling_image.jpg",
+      "categoryIds": [1],
+      "level": "Beginner",
+      "department": "Leren en Ontwikkelen"
+    },
+    {
+      "id": 6,
+      "title": "Effectieve Communicatie in de Gezondheidszorg",
+      "description": "Ontwikkel vaardigheden voor effectieve communicatie in de gezondheidszorgomgeving.",
+      "image": "https://example.com/healthcare_communication_image.jpg",
+      "categoryIds": [3],
+      "level": "Gevorderd",
+      "department": "Leren en Ontwikkelen"
+    },
+    {
+      "id": 7,
+      "title": "Creatieve Therapieën in de Psychiatrie",
+      "description": "Verken het gebruik van creatieve therapieën in de psychiatrie.",
+      "image": "https://example.com/creative_therapies_image.jpg",
+      "categoryIds": [3],
+      "level": "Intermediate",
+      "department": "Leren en Ontwikkelen"
+    }
+  ],
+  "categories": [
+    {
+      "name": "geestelijke_gezondheid",
+      "id": 1
+    },
+    {
+      "name": "kinder_en_jeugd",
+      "id": 2
+    },
+    {
+      "name": "professionele_ontwikkeling",
+      "id": 3
+    }
+  ]
+}
