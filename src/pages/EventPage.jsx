@@ -1,9 +1,8 @@
-// EventPage.js
-
+// EventPage.jsx
 import React, { useEffect, useState } from 'react';
-import { Heading, List, ListItem } from '@chakra-ui/react';
-import CourseDetail from './CourseDetail';
-import './Style.css'; // Adjust the file name in the import statement
+import { Heading, List, ListItem, Container, Box } from '@chakra-ui/react';
+import CourseDetail from '../components/CourseDetail';
+import styles from './StylePage';
 
 export const EventPage = () => {
   const [data, setData] = useState(null);
@@ -12,28 +11,31 @@ export const EventPage = () => {
     fetch('/events.json')
       .then(response => response.json())
       .then(jsonData => {
-        console.log('Received data:', jsonData);
+        console.log('Ontvangen data:', jsonData);
         setData(jsonData);
       })
-      .catch(error => console.error('Error fetching JSON data:', error));
+      .catch(error => console.error('Fout bij ophalen JSON-gegevens:', error));
   }, []);
 
   return (
-    <div>
-      <Heading>Leren & Ontwikkelen in de GGZ</Heading>
-      {data && data.events && (
-        <List className="event-list">
-          {data.events.map(event => (
-            <ListItem key={event.id} className="event-item">
-              <CourseDetail course={event} />
-            </ListItem>
-          ))}
-        </List>
-      )}
-    </div>
+    <Container style={styles.container}>
+      <Box style={styles.box}>
+        <Heading style={styles.heading}>Leren & Ontwikkelen in de GGZ</Heading>
+        {data && data.events && (
+          <List className="event-list">
+            {data.events.map(event => (
+              <ListItem key={event.id} style={styles.container} className="event-item">
+                <CourseDetail course={event} />
+              </ListItem>
+            ))}
+          </List>
+        )}
+      </Box>
+    </Container>
   );
-};;
+};
 
+export default EventPage;
 
 {/*
 
@@ -64,6 +66,13 @@ function UpdatingToastExample() {
     </Stack>
   )
 }*/}
+
+
+
+
+
+
+
 
 {/* Add a delete button that allows the user to delete the event. */}
 

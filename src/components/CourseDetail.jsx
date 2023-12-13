@@ -1,7 +1,9 @@
 import React from 'react';
-import './style.css'; // Import the stylesheet
+import styles from '../pages/StylePage';
 
 const CourseDetail = ({ course }) => {
+
+
   const {
     title,
     description,
@@ -13,7 +15,7 @@ const CourseDetail = ({ course }) => {
   } = course;
 
   return (
-    <div className="course-detail-container">
+    <div className="course-detail-container" style={styles.container}>
       <h1>{title}</h1>
       <p>{description}</p>
       <img src={image} alt={title} />
