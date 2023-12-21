@@ -1,26 +1,38 @@
 const styles = {
+  
   pageContainer: {
-    backgroundColor: '#e5e5e5', // Set your desired background color
-    minHeight: '100vh', // Ensure the container takes at least the full viewport height
-    display: 'flex', // Use flex to make the container grow vertically
-    flexDirection: 'column', // Stack children vertically
+    background: 'linear-gradient(to right, #3498db, #2ecc71)',
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '20px', // Adjust the padding as needed
   },
+  editContainer: {
+    // Define your styles for the edit container here
+    // For example:
+    border: '1px solid #ccc',
+    padding: '10px',
+    borderRadius: '5px',
+    margin: '20px',
+    border: '1px solid #ccc',
+  },
+  
   container: {
-    maxWidth: '900px',
+    maxWidth: '90%',
     margin: 'auto',
     fontFamily: 'Arial, sans-serif',
-    color: '#F2E3DB',
-    borderRadius: '8px',
-    backgroundColor: '#333',
+    color: '#fff',
+    borderRadius: '8px', 
+    backgroundColor: '#d3d3d3',
   },
   heading: {
     fontSize: 27,
     marginBottom: '10px',
-    color: '#263A29',
-    fontFamily: 'Georgia, "Times New Roman", Times, serif',
+    color: 'linear-gradient(to right, #3498db, #2ecc71)',
+    fontFamily: 'Arial, sans-serif',
   },
   box: {
-    backgroundColor: '#fff',
+    background: 'linear-gradient(to right, #87CEEB, #3CB371)',
     padding: '20px',
     borderRadius: '12px',
   },
@@ -29,7 +41,13 @@ const styles = {
         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
         border: '2px solid #527853', 
       },
-   button  
 
+  cancelButton: {
+        // Stijlen voor de annuleerknop toevoegen
+        marginRight: '30px', // Voeg rechtermarge toe om knoppen te scheiden
+      },
+  
+
+    
 };
  export default styles;

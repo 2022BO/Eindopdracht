@@ -1,8 +1,10 @@
 import React from 'react';
-import styles from '../pages/StylePage';
+import { Box, Heading, VStack, Image, Text } from '@chakra-ui/react';
 
 const CourseDetail = ({ course }) => {
-
+  if (!course) {
+    return null;
+  }
 
   const {
     title,
@@ -15,16 +17,31 @@ const CourseDetail = ({ course }) => {
   } = course;
 
   return (
-    <div className="course-detail-container" style={styles.container}>
-      <h1>{title}</h1>
-      <p>{description}</p>
-      <img src={image} alt={title} />
-      <p>Start Time: {startTime}</p>
-      <p>End Time: {endTime}</p>
-      <p>Categories: {categories.join(', ')}</p>
-      <p>Created by: {instructorName}</p>
-      <img src={instructorImage} alt={instructorName} />
-    </div>
+    <Box>
+      <Heading fontSize='xl' mb={2}>
+        {title}
+      </Heading>
+      <VStack align="start" spacing={2}>
+        <Box>
+          <strong>Description:</strong> {description}
+        </Box>
+        <Box>
+          <strong>Start Time:</strong> {startTime}
+        </Box>
+        <Box>
+          <strong>End Time:</strong> {endTime}
+        </Box>
+        <Box>
+          <strong>Categories:</strong> {categories.join(', ')}
+        </Box>
+        <Box>
+          <strong>Instructor:</strong>
+          {instructorName} {instructorImage && (
+            <img src={instructorImage} alt={`Image for ${instructorName}`} style={{ maxWidth: '50px' }} />
+          )}
+        </Box>
+      </VStack>
+    </Box>
   );
 };
 
