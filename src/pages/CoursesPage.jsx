@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CourseDetail } from '../components/CourseDetail';
+import CourseDetail from '../components/CourseDetail';
 import {
   Heading,
   List,
@@ -39,7 +39,8 @@ const CoursesPage = ({ setSelectedCourse }) => {
   }, []);
 
   const handleSaveChanges = () => {
-    // ... Jouw bestaande logica ...
+    alert('Changes saved!');
+    console.log('Save changes clicked');
   };
 
   const handleCourseSelection = (course) => {
@@ -91,7 +92,11 @@ const CoursesPage = ({ setSelectedCourse }) => {
                 ))}
             </Select>
             {filteredCoursesByCategory.map((course) => (
-              <CourseDetail key={course.id} course={course} />
+  <CourseDetail
+    key={course.id}
+    course={course}
+    onSelect={() => handleCourseSelection(course)}
+  />
             ))}
           </VStack>
           <Input
@@ -100,6 +105,7 @@ const CoursesPage = ({ setSelectedCourse }) => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+
           <Button colorScheme="blue" mt={2} onClick={handleSaveChanges}>
             Search
           </Button>
@@ -107,6 +113,9 @@ const CoursesPage = ({ setSelectedCourse }) => {
             <Button colorScheme='green' mt={2}>
               Add Course
             </Button>
+            <Button colorScheme="blue" mt={2} onClick={handleSaveChanges}>
+          Save Changes
+        </Button>
           </Link>
         </Box>
       </Container>

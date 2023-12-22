@@ -20,8 +20,6 @@ import CourseForm from '../components/CourseForm';
 export const EventPage = () => {
  
   const toast = useToast();
-  //const toastIdRef = React.useRef();
-  //const [courses, setCourses] = useState([]); 
   const [editMode, setEditMode] = useState(false);
   const [editedData, setEditedData] = useState({});
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -35,7 +33,23 @@ export const EventPage = () => {
     setSelectedCourse(editedData);
   };
 
+  const handleDeleteCourse = async (courseId) => {
+    try {
+      const response = await fetch(`/api/courses/${courseId}`, {
+        method: 'DELETE',
+      });
 
+      if (response.ok) {
+        toast({ description: 'Course deleted successfully', status: 'success' });
+        // Voeg hier eventueel extra logica toe na succesvol verwijderen
+      } else {
+        toast({ description: 'Failed to delete course', status: 'error' });
+      }
+    } catch (error) {
+      console.error('Error deleting course:', error);
+      toast({ description: 'Oops! Delete Failed!', status: 'error' });
+    }
+  };
   const handleSaveChanges = async (editedData) => {
     try {
       const response = await fetch(`/api/courses/${editedData.id}`, {
@@ -49,11 +63,11 @@ export const EventPage = () => {
       if (response.ok) {
         setEditMode(false);
         // Update de cursussen na succesvol verwijderen
-        {/*Show a message on success or on failure. This can be done e.g. in the form of a toast.*/}
+        
         //const updatedCourses = courses.filter((course) => course.id !== courseId);
         //setCourses(updatedCourses);
         toast({ description: 'Course deleted successfully', status: 'success' });
-        {/*Redirect the user back to the events page */}
+       
        
       } else {
         toast({ description: 'Failed to delete course', status: 'error' });

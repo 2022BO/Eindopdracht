@@ -2,9 +2,9 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import  AddCourse  from './pages/AddCourse';
-import { EventPage } from './pages/EventPage'; // Zorg ervoor dat je hier de juiste import hebt
-import { CoursesPage } from './pages/CoursesPage'; // Zorg ervoor dat je hier de juiste import hebt
+import AddCourse  from './pages/AddCourse';
+import { EventPage } from './pages/EventPage'; 
+import { CoursesPage } from './pages/CoursesPage';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Root } from './components/Root';
 

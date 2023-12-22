@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Heading, VStack, Image, Text } from '@chakra-ui/react';
 
-const CourseDetail = ({ course }) => {
+const CourseDetail = ({ course, onSelect }) => {
   if (!course) {
     return null;
   }
@@ -39,6 +39,11 @@ const CourseDetail = ({ course }) => {
           {instructorName} {instructorImage && (
             <img src={instructorImage} alt={`Image for ${instructorName}`} style={{ maxWidth: '50px' }} />
           )}
+          <Link to={`/event/${course.id}`}>
+        <Button colorScheme='blue' mt={2} onClick={onSelect}>
+          Bekijk details
+        </Button>
+      </Link>
         </Box>
       </VStack>
     </Box>
