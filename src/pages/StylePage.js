@@ -8,13 +8,11 @@ const styles = {
     padding: '20px', // Adjust the padding as needed
   },
   editContainer: {
-    // Define your styles for the edit container here
-    // For example:
-    border: '1px solid #ccc',
     padding: '10px',
     borderRadius: '5px',
     margin: '20px',
     border: '1px solid #ccc',
+    
   },
   
   container: {
@@ -23,7 +21,7 @@ const styles = {
     fontFamily: 'Arial, sans-serif',
     color: '#fff',
     borderRadius: '8px', 
-    backgroundColor: '#d3d3d3',
+    backgroundColor: 'linear-gradient(to right, #3498db, #2ecc71)',
   },
   heading: {
     fontSize: 27,
@@ -40,14 +38,30 @@ const styles = {
         borderRadius: '8px',
         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
         border: '2px solid #527853', 
+        objectFit: 'cover',
+        margin: '5px',
       },
+  imageInstrutor:{
+    borderRadius: '50%',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+    border: '2px solid #527853', 
+    objectFit: 'cover',
+    width: '50px',
+  height: '50px',
+  margin: '3px',
+      },   
 
   cancelButton: {
         // Stijlen voor de annuleerknop toevoegen
         marginRight: '30px', // Voeg rechtermarge toe om knoppen te scheiden
       },
   
-
+ courseDetailBox: {
+      
+        maxWidth: '700px', // Pas de maximale breedte aan naar wens
+        margin: 'auto',
+        marginBottom: '20px', // Pas de onderste marge aan naar wens
+      },
     
 };
  export default styles;

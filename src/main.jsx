@@ -1,12 +1,21 @@
 // main.jsx
-import { ChakraProvider } from '@chakra-ui/react';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import AddCourse  from './pages/AddCourse';
-import { EventPage } from './pages/EventPage'; 
-import { CoursesPage } from './pages/CoursesPage';
+import { ChakraProvider, ColorModeScript, extendTheme } from '@chakra-ui/react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Root } from './components/Root';
+import CoursesPage from './pages/CoursesPage'; 
+import { EventPage } from './pages/EventPage';
+import { CourseForm } from './components/CourseForm';
+import ErrorBoundary from './pages/ErrorBoundry';
+
+
+const theme = extendTheme({
+  config: {
+    initialColorMode: 'light',
+    useSystemColorMode: false,
+  },
+});
 
 const router = createBrowserRouter([
   {
@@ -15,20 +24,15 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <CoursesPage />,
-        // loader: postListLoader,
+        element: <ErrorBoundary><CoursesPage /></ErrorBoundary>,
       },
       {
         path: '/event/:eventId',
-        element: <EventPage />,
-        // loader: postLoader,
-        // action: addComment,
+        element: <ErrorBoundary><EventPage /></ErrorBoundary>,
       },
       {
         path: '/add-course',
-        element: <AddCourse />,
-        // loader: postLoader,
-        // action: addComment,
+        element: <ErrorBoundary><CourseForm /></ErrorBoundary>,
       },
     ],
   },
@@ -36,9 +40,8 @@ const router = createBrowserRouter([
 
 // @ts-ignore
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <ChakraProvider>
-      <RouterProvider router={router} />
-    </ChakraProvider>
-  </React.StrictMode>,
+  <ChakraProvider theme={theme}>
+    <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+    <RouterProvider router={router} />
+  </ChakraProvider>
 );

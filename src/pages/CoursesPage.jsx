@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
-import CourseDetail from '../components/CourseDetail';
+import React, { useState, useEffect } from 'react';
+import { CourseDetail } from '../components/CourseDetail';
+import { CourseForm } from '../components/CourseForm';
+import { AddIcon, ArrowUpIcon, SearchIcon } from '@chakra-ui/icons';
+import { Link } from 'react-router-dom';
 import {
   Heading,
-  List,
-  ListItem,
   Container,
   Box,
   Button,
@@ -11,7 +12,6 @@ import {
   VStack,
   Text,
   Input,
-  Link,
   Select,
   Alert,
   AlertIcon,
@@ -20,13 +20,14 @@ import {
 } from '@chakra-ui/react';
 import styles from './StylePage';
 
-
-const CoursesPage = ({ setSelectedCourse }) => {
+const CoursesPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [invalidInput, setInvalidInput] = useState(false);
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [data, setData] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [isFormOpen, setFormOpen] = useState(false); // Add isFormOpen state
 
   useEffect(() => {
     fetch('/events.json')
@@ -34,13 +35,19 @@ const CoursesPage = ({ setSelectedCourse }) => {
       .then((jsonData) => {
         console.log('Received data:', jsonData);
         setData(jsonData);
+        if (jsonData.courses) {
+          setFilteredCourses(jsonData.courses);
+        }
       })
       .catch((error) => console.error('Error fetching JSON data:', error));
   }, []);
 
-  const handleSaveChanges = () => {
-    alert('Changes saved!');
-    console.log('Save changes clicked');
+  const handleSearch = () => {
+    const newFilteredCourses = data.courses.filter((course) =>
+      course.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredCourses(newFilteredCourses);
+    setInvalidInput(newFilteredCourses.length === 0);
   };
 
   const handleCourseSelection = (course) => {
@@ -52,20 +59,35 @@ const CoursesPage = ({ setSelectedCourse }) => {
   };
 
   const filterByCategory = (course) => {
-    return selectedCategory === '' || course.categories.includes(selectedCategory);
+    return selectedCategory === '' || course.categories.some((category) => category.id === selectedCategory);
+  };
+
+  const handleAddCourseClick = () => {
+    setFormOpen(true);
+    setSelectedCourse(null);
+  };
+
+  // Define handleCreateCourse to handle the creation of a new course
+  const handleCreateCourse = (newCourse) => {
+    // Handle the creation of the course, e.g., sending a request to the server
+    // Update the state and close the form
+    setFilteredCourses([...filteredCourses, newCourse]);
+    setFormOpen(false);
   };
 
   const filteredCoursesByCategory = filteredCourses.filter(filterByCategory);
 
   return (
-    <Center h='100%' flexDir='column' style={{ ...styles.pageContainer }}>
-      <Container style={{ ...styles.container, background: 'linear-gradient(to right, #3498db, #2ecc71)' }}>
-        <Box style={styles.box}>
+    <Center h="100%" flexDir="column" style={{ ...styles.pageContainer }}>
+    <Container style={{ ...styles.container }}>
+      <Box style={styles.box}>
           <Heading style={styles.heading}>Leren & Ontwikkelen in de GGZ</Heading>
           {invalidInput && (
             <Alert status="error">
               <AlertIcon />
-              <AlertTitle mr={3} style={{ padding: '10px' }}>Oeps!</AlertTitle>
+              <AlertTitle mr={3} style={{ padding: '10px' }}>
+                Oeps!
+              </AlertTitle>
               <AlertDescription>
                 <strong>Wat kun je doen?</strong>
                 <ul>
@@ -76,12 +98,8 @@ const CoursesPage = ({ setSelectedCourse }) => {
               </AlertDescription>
             </Alert>
           )}
-          <VStack spacing={4} align={'stretch'} p={4}>
-            <Select
-              placeholder="Filter op categorie"
-              value={selectedCategory}
-              onChange={handleCategoryChange}
-            >
+          <VStack spacing={3} align={'stretch'} p={4}>
+            <Select placeholder="Filter op categorie" value={selectedCategory} onChange={handleCategoryChange}>
               <option value="">Alle categorieën</option>
               {data &&
                 data.categories &&
@@ -91,32 +109,51 @@ const CoursesPage = ({ setSelectedCourse }) => {
                   </option>
                 ))}
             </Select>
-            {filteredCoursesByCategory.map((course) => (
-  <CourseDetail
-    key={course.id}
-    course={course}
-    onSelect={() => handleCourseSelection(course)}
-  />
-            ))}
-          </VStack>
-          <Input
-            type="text"
-            placeholder="Search courses..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
 
-          <Button colorScheme="blue" mt={2} onClick={handleSaveChanges}>
-            Search
-          </Button>
-          <Link to="/add-course">
-            <Button colorScheme='green' mt={2}>
-              Add Course
+            <Input
+              type="text"
+              placeholder="Vul cursusnaam in..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <Button colorScheme="blue" mt={2} onClick={handleSearch}>
+              Zoeken <SearchIcon ml="auto" />
             </Button>
-            <Button colorScheme="blue" mt={2} onClick={handleSaveChanges}>
-          Save Changes
-        </Button>
-          </Link>
+
+            {filteredCoursesByCategory.map((course) => (
+            <CourseDetail
+              key={course.id}
+              eventId={course.id}  // Pass the eventId prop
+              onSelect={() => handleCourseSelection(course)}
+            />
+          ))}
+          </VStack>
+
+          {/* Display the selected course details */}
+          {selectedCourse && (
+            <Box mt={4}>
+              <Heading fontSize="xl">Geselecteerde Cursus</Heading>
+              <CourseDetail course={selectedCourse} />
+            </Box>
+          )}
+
+<Box style={{ ...styles.box, display: 'flex', justifyContent: 'space-between' }}>
+            <Button colorScheme="green" mt={2} onClick={handleAddCourseClick}>
+              <Text mr={2}>Cursus toevoegen</Text>
+              <AddIcon ml="auto" />
+            </Button>
+            {isFormOpen && (
+              <CourseForm
+                isOpen={isFormOpen}
+                onClose={() => setFormOpen(false)}
+                createCourse={handleCreateCourse} // Pass the handler function
+              />
+            )}
+            <Button colorScheme="blue" variant="outline" mt={2} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+              <Text mr={2}>Terug naar boven</Text>
+              <ArrowUpIcon ml="auto" />
+            </Button>
+          </Box>
         </Box>
       </Container>
     </Center>

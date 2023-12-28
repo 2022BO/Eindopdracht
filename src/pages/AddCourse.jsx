@@ -1,12 +1,15 @@
-import { useState } from 'react';
-import { Button, Input, Textarea } from '@chakra-ui/react';
+import { useState } from "react";
+import { Button, Input, Textarea } from "@chakra-ui/react";
+import { CourseForm } from "../components/CourseForm";
 
 const AddCourse = () => {
+  const [isFormOpen, setFormOpen] = useState(false);
   const [courseData, setCourseData] = useState({
-    title: '',
-    description: '',
-    startTime: '', 
-    endTime: '', 
+    title: "",
+    description: "",
+    startTime: "",
+    endTime: "",
+    instructor: { name: "", image: "" },
   });
 
   const handleInputChange = (e) => {
@@ -17,29 +20,38 @@ const AddCourse = () => {
     }));
   };
 
-  const handleAddCourse = async () => {
+  const handleSaveChanges = async () => {
     try {
-      const response = await fetch('/add-course-endpoint', {
-        method: 'POST',
+      const { title, description, startTime, endTime, instructor } = courseData;
+
+      const response = await fetch("/add-course-endpoint", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(courseData),
+        body: JSON.stringify({
+          title,
+          description,
+          startTime,
+          endTime,
+          instructor: {
+            name: instructor.name,
+            image: instructor.image,
+          },
+        }),
       });
 
       if (response.ok) {
-        // Handle success, maybe redirect or show a success message
+        console.log("Course saved successfully!");
       } else {
-        // Handle error, maybe show an error message
+        console.error("Error saving course:", response.statusText);
       }
     } catch (error) {
-      console.error('Error adding course:', error);
-      // Handle error, maybe show an error message
+      console.error("Error adding course:", error);
     }
   };
-
   return (
-    <form onSubmit={handleAddCourse}>
+    <form onSubmit={handleSaveChanges}>
     <div>
       <h1>Add course</h1>
       <label>Title:</label>
@@ -96,10 +108,14 @@ const AddCourse = () => {
           instructor: { ...courseData.instructor, image: e.target.value },
         })}
       />
-      <Button type="submit" colorScheme="green">
-        Add Course
-      </Button>
-    </div>
+     <Button onClick={() => setFormOpen(true)}>Open CourseForm</Button>
+        {isFormOpen && (
+          <CourseForm
+            addCourse={handleSaveChanges}
+            onClose={() => setFormOpen(false)}
+          />
+        )}
+      </div>
     </form>
   );
 };
