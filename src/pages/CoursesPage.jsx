@@ -68,10 +68,10 @@ const CoursesPage = () => {
   };
 
   // Define handleCreateCourse to handle the creation of a new course
-  const handleCreateCourse = (newCourse) => {
+  const handleSaveChanges = (addCourse) => {
     // Handle the creation of the course, e.g., sending a request to the server
     // Update the state and close the form
-    setFilteredCourses([...filteredCourses, newCourse]);
+    setFilteredCourses([...filteredCourses, addCourse]);
     setFormOpen(false);
   };
 
@@ -146,7 +146,7 @@ const CoursesPage = () => {
               <CourseForm
                 isOpen={isFormOpen}
                 onClose={() => setFormOpen(false)}
-                createCourse={handleCreateCourse} // Pass the handler function
+                createCourse={handleSaveChanges} // Pass the handler function
               />
             )}
             <Button colorScheme="blue" variant="outline" mt={2} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>

@@ -12,6 +12,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import styles from './StylePage';
+import AddCourse from './AddCourse';
 
 
 export const EventPage = () => {
@@ -86,7 +87,7 @@ export const EventPage = () => {
       <Container style={{ ...styles.container, background: 'linear-gradient(to right, #3498db, #2ecc71)' }}>
         <Heading style={styles.heading}>Leren & Ontwikkelen in de GGZ</Heading>
 
-        <CourseForm
+        <AddCourse
           isOpen={isFormOpen}
           onClose={() => setFormOpen(false)}
           onSave={handleSaveChanges}

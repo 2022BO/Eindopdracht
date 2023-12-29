@@ -1,4 +1,5 @@
 import { useState } from "react";
+import AddCourse from "../pages/AddCourse";
 import {
   Box,
   Button,

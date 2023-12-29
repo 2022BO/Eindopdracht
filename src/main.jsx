@@ -8,6 +8,9 @@ import CoursesPage from './pages/CoursesPage';
 import { EventPage } from './pages/EventPage';
 import { CourseForm } from './components/CourseForm';
 import ErrorBoundary from './pages/ErrorBoundry';
+import AddCourse from './pages/AddCourse';
+
+
 
 
 const theme = extendTheme({
@@ -32,7 +35,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/add-course',
-        element: <ErrorBoundary><CourseForm /></ErrorBoundary>,
+        element: <ErrorBoundary><AddCourse/></ErrorBoundary>,
       },
     ],
   },
