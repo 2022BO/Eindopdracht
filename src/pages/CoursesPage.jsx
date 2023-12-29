@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { CourseDetail } from '../components/CourseDetail';
 import { CourseForm } from '../components/CourseForm';
+import AddCourse from '../pages/AddCourse';
+import { CourseDetail } from '../components/CourseDetail';
 import { AddIcon, ArrowUpIcon, SearchIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
 import {
@@ -67,7 +68,7 @@ const CoursesPage = () => {
     setSelectedCourse(null);
   };
 
-  // Define handleCreateCourse to handle the creation of a new course
+  // Define handleaddCourse to handle the creation of a new course
   const handleSaveChanges = (addCourse) => {
     // Handle the creation of the course, e.g., sending a request to the server
     // Update the state and close the form
@@ -119,13 +120,12 @@ const CoursesPage = () => {
             <Button colorScheme="blue" mt={2} onClick={handleSearch}>
               Zoeken <SearchIcon ml="auto" />
             </Button>
-
             {filteredCoursesByCategory.map((course) => (
-            <CourseDetail
-              key={course.id}
-              eventId={course.id}  // Pass the eventId prop
-              onSelect={() => handleCourseSelection(course)}
-            />
+  <CourseDetail
+    key={course.id}
+    eventId={course.id}
+    onSelect={() => handleCourseSelection(course)}
+  />
           ))}
           </VStack>
 
@@ -146,7 +146,7 @@ const CoursesPage = () => {
               <CourseForm
                 isOpen={isFormOpen}
                 onClose={() => setFormOpen(false)}
-                createCourse={handleSaveChanges} // Pass the handler function
+                addCourse={handleSaveChanges} // Pass the handler function
               />
             )}
             <Button colorScheme="blue" variant="outline" mt={2} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>

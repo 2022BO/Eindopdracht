@@ -62,6 +62,8 @@ const styles = {
         margin: 'auto',
         marginBottom: '20px', // Pas de onderste marge aan naar wens
       },
+
+
     
 };
  export default styles;

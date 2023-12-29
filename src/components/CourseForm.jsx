@@ -1,5 +1,4 @@
-import { useState } from "react";
-import AddCourse from "../pages/AddCourse";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -15,8 +14,11 @@ import {
   ModalOverlay,
   ModalCloseButton,
 } from "@chakra-ui/react";
+import AddCourse from '../pages/AddCourse';
 
-export const CourseForm = ({ addCourse, onClose }) => {
+
+export const CourseForm = ({ onSave, onCancel, data }) => {
+  const [isOpen, setOpen] = useState(true);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [startTime, setStartTime] = useState("");
@@ -43,11 +45,7 @@ export const CourseForm = ({ addCourse, onClose }) => {
     };
 
     try {
-      // Ensure that addCourse is a function
-      if (typeof addCourse === "function") {
-        // Call addCourse with the necessary parameters
-        await addCourse(courseData);
-
+      await addCourse(courseData);
         // Reset form fields after successful save
         setTitle("");
         setDescription("");
@@ -55,20 +53,17 @@ export const CourseForm = ({ addCourse, onClose }) => {
         setEndTime("");
         setCategories([]);
         setInstructor({ name: "", image: "" });
-
+  
         onClose && onClose();
-      } else {
-        console.error("addCourse is not a function");
+      } catch (error) {
+        console.error("Error saving course:", error);
       }
-    } catch (error) {
-      console.error("Error saving course:", error);
-      // Handle error (e.g., show an error message)
-    }
-  };
+    };
+  
 
-  return (
-    <Box>
-      <Modal isOpen={true} onClose={onClose}>
+    return (
+      <Box>
+        <Modal isOpen={true} onClose={onClose}>
         <ModalOverlay />
         <ModalContent
           style={{
@@ -151,28 +146,26 @@ export const CourseForm = ({ addCourse, onClose }) => {
       image: e.target.value,
     })}
   />
-</FormControl>   
+</FormControl> 
 </ModalBody>
-          <ModalFooter style={{ justifyContent: "space-between" }}>
-            <Button
-              colorScheme="blue"
-              onClick={(event) => handleSaveChanges(event)}
-            >
-              Opslaan
-            </Button>
-            <Button
-              colorScheme="red"
-              variant="outline"
-              ml={4}
-              onClick={onClose}
-            >
-              Annuleer
-            </Button>
-          </ModalFooter>
-        </ModalContent>
+</ModalContent>  
+<ModalFooter style={{ justifyContent: "space-between" }}>
+          <Button
+            colorScheme="blue"
+            onClick={(event) => handleSaveChanges(event)}
+          >
+            Opslaan
+          </Button>
+          <Button
+            colorScheme="red"
+            variant="outline"
+            ml={4}
+            onClick={onClose}
+          >
+            Annuleer
+          </Button>
+        </ModalFooter>
       </Modal>
     </Box>
   );
 };
-
-

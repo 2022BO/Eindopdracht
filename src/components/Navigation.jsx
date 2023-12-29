@@ -29,7 +29,7 @@ export const Navigation = () => {
       <Link to="/" style={linkStyle}>
         Cursuscatalogus
       </Link>
-      <Link to="/event/1" style={{ ...linkStyle, marginLeft: '20px' }}>
+      <Link to="/event/:eventId" style={{ ...linkStyle, marginLeft: '20px' }}>
         Cursus toevoegen
       </Link>
     </nav>

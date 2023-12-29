@@ -1,19 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import { CourseForm } from '../components/CourseForm';
-import {
-  Box,
-  Text,
-  Container,
-  Button,
-  Image,
-  ListItem,
-  UnorderedList,
-  Heading,
-  useToast,
-} from '@chakra-ui/react';
+import { Box, Text, Container, Button, Image, ListItem, UnorderedList, Heading, useToast } from '@chakra-ui/react';
 import styles from './StylePage';
 import AddCourse from './AddCourse';
 
+const EditedDataView = ({ editedData, handleAddCourseClick, handleDeleteCourse }) => (
+  <Box>
+    <Box style={styles.box}>
+      <Text fontSize="lg">Titel: {editedData.title}</Text>
+      <Text>Omschrijving: {editedData.description}</Text>
+      <Text>Starttijd: {editedData.startTime}</Text>
+      <Text>Eindtijd: {editedData.endTime}</Text>
+      <Text>Categorieën: {editedData.categories?.join(', ')}</Text>
+      <Text>Docent: {editedData.instructor?.name}</Text>
+      {editedData.instructor?.image && (
+        <Image
+          src={editedData.instructor?.image}
+          alt={editedData.instructor?.name}
+          style={styles.image}
+        />
+      )}
+    </Box>
+
+    <Box style={{ ...styles.box, display: 'flex', justifyContent: 'space-between' }}>
+      <Button onClick={handleAddCourseClick} style={styles.editButton}>
+        Cursus toevoegen
+      </Button>
+      <Button
+        colorScheme="red"
+        variant="outline"
+        onClick={() => {
+          if (window.confirm('Are you sure you want to delete this course?')) {
+            handleDeleteCourse(editedData.id);
+          }
+        }}
+      >
+        Verwijder
+      </Button>
+    </Box>
+  </Box>
+);
 
 export const EventPage = () => {
   const toast = useToast();
@@ -55,7 +80,7 @@ export const EventPage = () => {
 
   const handleSaveChanges = async (editedData) => {
     console.log('Trying to save changes for course:', editedData);
-  
+
     try {
       const response = await fetch(`/api/courses/${editedData.id}`, {
         method: 'PUT',
@@ -64,7 +89,7 @@ export const EventPage = () => {
         },
         body: JSON.stringify(editedData),
       });
-  
+
       if (response.ok) {
         setEditMode(false);
         toast({ description: 'Course saved successfully', status: 'success' });
@@ -86,13 +111,6 @@ export const EventPage = () => {
     <Box style={styles.pageContainer}>
       <Container style={{ ...styles.container, background: 'linear-gradient(to right, #3498db, #2ecc71)' }}>
         <Heading style={styles.heading}>Leren & Ontwikkelen in de GGZ</Heading>
-
-        <AddCourse
-          isOpen={isFormOpen}
-          onClose={() => setFormOpen(false)}
-          onSave={handleSaveChanges}
-          data={selectedCourse}
-        />
 
         <Box style={styles.header}>
           <h1>Welkom bij de Cursusbeheer Pagina!</h1>
@@ -139,7 +157,7 @@ export const EventPage = () => {
               </Text>
             </ListItem>
             <ListItem style={{ fontSize: '1em', fontWeight: 'bold' }}>
-              Bekijk je Werk
+              Bekijk je resultaat
               <Text mb={2} style={{ fontWeight: 'normal', fontSize: 'inherit' }}>
                 Zodra opgeslagen, kun je de details van je nieuwe cursus bekijken op de hoofdpagina.
               </Text>
@@ -147,48 +165,24 @@ export const EventPage = () => {
           </UnorderedList>
         </Box>
 
-        <Box style={editMode ? styles.editContainer : styles.courseContainer}>
-          {editedData && (
-            <div key={editedData.id}>
-              {editedData.image && (
-                <Image src={editedData.image} alt={editedData.title} style={styles.image} />
-              )}
-              <Box style={styles.box}>
-                <Text fontSize="lg">Titel: {editedData.title}</Text>
-                <Text>Omschrijving: {editedData.description}</Text>
-                <Text>Starttijd: {editedData.startTime}</Text>
-                <Text>Eindtijd: {editedData.endTime}</Text>
-                <Text>Categorieën: {editedData.categories?.join(', ')}</Text>
-                <Text>Docent: {editedData.instructor?.name}</Text>
-                {editedData.instructor?.image && (
-                  <Image
-                    src={editedData.instructor?.image}
-                    alt={editedData.instructor?.name}
-                    style={styles.image}
-                  />
-                )}
-              </Box>
-
-              <Box style={{ ...styles.box, display: 'flex', justifyContent: 'space-between' }}>
-                <Button onClick={handleAddCourseClick} style={styles.editButton}>
-                  Cursus toevoegen
-                </Button>
-                <Button
-                  colorScheme="red"
-                  variant="outline"
-                  onClick={() => {
-                    if (window.confirm('Are you sure you want to delete this course?')) {
-                      handleDeleteCourse(editedData.id);
-                    }
-                  }}
-                >
-                  Verwijder
-                </Button>
-              </Box>
-            </div>
-          )}
-        </Box>
+        {editMode ? (
+          <EditedDataView
+            editedData={editedData}
+            handleAddCourseClick={handleAddCourseClick}
+            handleDeleteCourse={handleDeleteCourse}
+          />
+        ) : (
+          <AddCourse
+            isOpen={isFormOpen}
+            onClose={() => setFormOpen(false)}
+            onSave={handleSaveChanges}
+            data={selectedCourse}
+          />
+        )}
       </Container>
     </Box>
   );
 };
+
+export default EventPage;
+
