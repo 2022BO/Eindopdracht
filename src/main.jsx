@@ -4,13 +4,11 @@ import ReactDOM from 'react-dom/client';
 import { ChakraProvider, ColorModeScript, extendTheme } from '@chakra-ui/react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Root } from './components/Root';
-import CoursesPage from './pages/CoursesPage'; 
+import CoursesPage from './pages/CoursesPage';
 import { EventPage } from './pages/EventPage';
 import ErrorBoundary from './pages/ErrorBoundry';
 import AddCourse from './pages/AddCourse';
-
-
-
+import { CourseDetail } from './components/CourseDetail';
 
 
 const theme = extendTheme({
@@ -37,14 +35,21 @@ const router = createBrowserRouter([
         path: '/add-course',
         element: <ErrorBoundary><AddCourse/></ErrorBoundary>,
       },
+      {
+        path: '/course/:courseId',
+        element: <ErrorBoundary><CourseDetail /></ErrorBoundary>,
+      }
     ],
   },
 ]);
 
-// @ts-ignore
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ChakraProvider theme={theme}>
     <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-    <RouterProvider router={router} />
+    <RouterProvider router={router}>
+      <Root />
+    </RouterProvider>
   </ChakraProvider>
 );
+
+export default router;

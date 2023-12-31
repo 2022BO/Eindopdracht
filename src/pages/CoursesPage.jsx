@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CourseForm } from '../components/CourseForm';
-import AddCourse from '../pages/AddCourse';
+import AddCourse from './AddCourse';
 import { CourseDetail } from '../components/CourseDetail';
 import { AddIcon, ArrowUpIcon, SearchIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
@@ -13,6 +12,7 @@ import {
   VStack,
   Text,
   Input,
+  Image,
   Select,
   Alert,
   AlertIcon,
@@ -22,13 +22,20 @@ import {
 import styles from './StylePage';
 
 const CoursesPage = () => {
+  const [courses, setCourses] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [invalidInput, setInvalidInput] = useState(false);
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [data, setData] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedCourse, setSelectedCourse] = useState(null);
-  const [isFormOpen, setFormOpen] = useState(false); // Add isFormOpen state
+  const [isFormOpen, setFormOpen] = useState(false);
+  const [editedData, setEditedData] = useState({});
+
+  useEffect(() => {
+    console.log('Selected Course:', selectedCourse);
+    setEditedData(selectedCourse || {});
+  }, [selectedCourse]);
 
   useEffect(() => {
     fetch('/events.json')
@@ -52,7 +59,12 @@ const CoursesPage = () => {
   };
 
   const handleCourseSelection = (course) => {
-    setSelectedCourse(course);
+    try {
+      console.log('Course selected:', course);
+      setSelectedCourse(course);
+    } catch (error) {
+      console.error('Error selecting course:', error);
+    }
   };
 
   const handleCategoryChange = (event) => {
@@ -68,20 +80,41 @@ const CoursesPage = () => {
     setSelectedCourse(null);
   };
 
-  // Define handleaddCourse to handle the creation of a new course
-  const handleSaveChanges = (addCourse) => {
-    // Handle the creation of the course, e.g., sending a request to the server
-    // Update the state and close the form
-    setFilteredCourses([...filteredCourses, addCourse]);
-    setFormOpen(false);
+  const handleUpdateCourses = (newCourse) => {
+    // Voeg de nieuwe cursus toe aan de lijst met cursussen of voer andere logica uit om de cursus bij te werken
+    const updatedCourses = [...courses, newCourse];
+    setCourses(updatedCourses);
+  };
+
+  const handleDeleteCourse = async (courseId) => {
+    const isConfirmed = window.confirm("Are you sure 100% sure you want to delete this course?");
+    if (!isConfirmed) {
+      return;
+    }
+    try {
+      const response = await fetch(`http://localhost:3000/courses/${courseId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        // Verwijder de cursus uit de lijst
+        const updatedCourses = courses.filter((course) => course.id !== courseId);
+        setCourses(updatedCourses);
+        setSelectedCourse(null);
+      } else {
+        console.error('Failed to delete course. Server returned:', response);
+      }
+    } catch (error) {
+      console.error('Error deleting course:', error);
+    }
   };
 
   const filteredCoursesByCategory = filteredCourses.filter(filterByCategory);
 
   return (
     <Center h="100%" flexDir="column" style={{ ...styles.pageContainer }}>
-    <Container style={{ ...styles.container }}>
-      <Box style={styles.box}>
+      <Container style={{ ...styles.container }}>
+        <Box style={styles.box}>
           <Heading style={styles.heading}>Leren & Ontwikkelen in de GGZ</Heading>
           {invalidInput && (
             <Alert status="error">
@@ -110,7 +143,6 @@ const CoursesPage = () => {
                   </option>
                 ))}
             </Select>
-
             <Input
               type="text"
               placeholder="Vul cursusnaam in..."
@@ -121,12 +153,54 @@ const CoursesPage = () => {
               Zoeken <SearchIcon ml="auto" />
             </Button>
             {filteredCoursesByCategory.map((course) => (
-  <CourseDetail
-    key={course.id}
-    eventId={course.id}
-    onSelect={() => handleCourseSelection(course)}
+            
+                <Box key={course.id} borderWidth="1px" borderRadius="lg" overflow="hidden" >
+                  <img src={course.image} alt={course.title} style={styles.image} />
+                  <Text as="h3" fontSize="lg" fontWeight="bold" color="blue.500" mb={2}>
+                    {course.title}
+                  </Text>
+                  <Text>
+                    <strong>Omschrijving:</strong> {course.description}
+                  </Text>
+                  <Text>
+                    <strong>Starttijd:</strong> {course.startTime}
+                  </Text>
+                  <Text>
+                    <strong>Eindtijd:</strong> {course.endTime}
+                  </Text>
+                  <Text>
+                    <strong>Categorieën:</strong> {course.categories ? course.categories.join(', ') : 'N/A'}
+                  </Text>
+                  <Text>
+      Docent: {course.instructor?.name || "Informatie niet beschikbaar"}
+    </Text>
+    {course.instructor?.image && (
+  <Image
+    boxSize="50px"  // Set the desired size
+    src={course.instructor?.image}
+    alt={course.instructor?.name}
+    style={styles.imageInstrutor}
   />
-          ))}
+)}
+                {course.id === selectedCourse?.id ? (
+                  <CourseDetail key={course.id} courseId={course.id} /> 
+                ) : (
+                  <>
+                    <CourseDetail key={course.id} eventId={course.id} onSelect={() => handleCourseSelection(course)} />
+                   <Link to={`/course/${course.id}`}>
+  <Button colorScheme="blue" variant="outline" ml={4} mt={4} mr={4} mb={4}>
+    Selecteer
+  </Button>
+</Link>
+                    <Button colorScheme="red" variant="outline" ml={4} mt={4} mr={4} mb={4} onClick={() => handleDeleteCourse(course.id)}>
+                      Verwijderen
+                    </Button>
+        
+         
+                  </>
+                )}
+              </Box>
+            ))}
           </VStack>
 
           {/* Display the selected course details */}
@@ -137,30 +211,27 @@ const CoursesPage = () => {
             </Box>
           )}
 
-<Box style={{ ...styles.box, display: 'flex', justifyContent: 'space-between' }}>
+          <Box style={{ ...styles.box, display: 'flex', justifyContent: 'space-between' }}>
             <Button colorScheme="green" mt={2} onClick={handleAddCourseClick}>
               <Text mr={2}>Cursus toevoegen</Text>
               <AddIcon ml="auto" />
             </Button>
-            {isFormOpen && (
-              <CourseForm
-                isOpen={isFormOpen}
-                onClose={() => setFormOpen(false)}
-                addCourse={handleSaveChanges} // Pass the handler function
-              />
-            )}
             <Button colorScheme="blue" variant="outline" mt={2} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               <Text mr={2}>Terug naar boven</Text>
               <ArrowUpIcon ml="auto" />
             </Button>
           </Box>
         </Box>
+        {isFormOpen && (
+          <AddCourse isOpen={isFormOpen} onClose={() => setFormOpen(false)} handleUpdateCourses={handleUpdateCourses} />
+        )}
       </Container>
     </Center>
   );
 };
 
 export default CoursesPage;
+
 
 
 
@@ -180,9 +251,3 @@ export default CoursesPage;
 
 //Add a Filter Function. We need a feature that lets users filter the displayed results based on different categories.
 
-//The page shows a list of all events that are retrieved from the back-end server with the following details: title, description, image, startTime, endTime and categories.
-//The user can click on an event that leads them to the ‘Event’ page using React Router.
-//There is a button that allows the user to add new events using a form. 
-//A query to add the event to the server is sent as well.
-//You can search through the events based on the name of the event.
-//You can filter through the list/search results based on categories.

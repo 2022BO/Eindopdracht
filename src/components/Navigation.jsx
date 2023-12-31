@@ -5,7 +5,7 @@ export const Navigation = () => {
   const navStyle = {
     display: 'flex',
     justifyContent: 'space-around',
-    background: 'linear-gradient(to left, #3498db, #2ecc71)', // Gebruik 'background' in plaats van 'backgroundColor'
+    background: 'linear-gradient(to left, #3498db, #2ecc71)', 
     padding: '10px',
   };
 

@@ -1,12 +1,14 @@
-//CourseDetail
 import React, { useEffect, useState, useRef } from 'react';
-import { Box, Image, VStack, Text, HStack } from '@chakra-ui/react';
+import { Box, Image, VStack, Text, HStack} from '@chakra-ui/react';
 import styles from '../pages/StylePage';
 import { TimeIcon } from '@chakra-ui/icons';
+import { Link, useParams } from 'react-router-dom';
 
-export const CourseDetail = ({ eventId, onSelect }) => {
+export const CourseDetail = () => {
+  const { courseId } = useParams();
+
   const [course, setCourse] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState({ happened: false, msg: '' });
   const isMountedRef = useRef(true);
 
@@ -16,7 +18,7 @@ export const CourseDetail = ({ eventId, onSelect }) => {
 
     const fetchNewCourse = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/courses/${eventId}`);
+        const response = await fetch(`http://localhost:3000/courses/${courseId}`);
 
         if (!response.ok) {
           setError({
@@ -46,18 +48,14 @@ export const CourseDetail = ({ eventId, onSelect }) => {
     fetchNewCourse();
 
     return () => {
+
       isMountedRef.current = false; // Set the flag to false when the component is unmounted
     };
-  }, [eventId]);
-
-  if (error.happened) {
-    return <p>The following error occurred: {error.msg}</p>;
-  }
+  }, [courseId]);
 
   if (isLoading || !course) {
     return <p>Loading...</p>;
   }
-
 
   const { title, description, image, categories, startTime, endTime, instructor } = course;
   const categoriesContent = categories ? categories.join(', ') : 'N/A';
@@ -67,59 +65,61 @@ export const CourseDetail = ({ eventId, onSelect }) => {
   }
 
   return (
-    <Box
-      maxW="md"
-      borderWidth="1px"
-      borderRadius="lg"
-      overflow="hidden"
-      marginBottom="20px"
-      style={styles.courseDetailBox}
-    >
-
-      <HStack spacing="4">
-      <Image
-  src={course.image}
-  alt={course.title}
-  style={{
-  ...styles.image,
-  width: `${course.imageWidth}px`,
-  height: `${course.imageHeight}px`,
-}}
-/>
-        <VStack align="start" spacing="2" flex="1">
-          <Text fontSize="xl" fontWeight="bold">
+    <Box maxW="xl" mx="auto" my="4" p="4" borderWidth="1px" borderRadius="lg" overflow="hidden"  bgColor="#8AC7DE" boxShadow="lg" >
+    <HStack spacing="4">
+        <Image
+          src={course.image}
+          alt={course.title}
+          style={styles.image}
+        />
+       <VStack align="start" spacing="4" flex="1">
+          <Text as="h3" fontSize="lg" fontWeight="bold" color="blue.500" mb={2}>
             {title}
           </Text>
           <Text>
-          <strong>Omschrijving:</strong>
-            {description}</Text>
-            <Box style={{ ...styles.box, display: 'flex', justifyContent: 'space-between' }}>
+            <strong>Omschrijving:</strong>
+            {description}
+          </Text>
+          <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Text>
               <strong>Categorieën:</strong> {categoriesContent}
             </Text>
-            </Box>
-            <Box>
-            <Text> <TimeIcon/>
+          </Box>
+          <Box>
+            <Text>
+              <TimeIcon />
               <strong>Starttijd:</strong> {startTime}
             </Text>
-            <Text> <TimeIcon/>
-              <strong>Eindtijd:</strong> {endTime}
+            <Text>
+              <TimeIcon />
+              <strong>Eindtijd:</strong> {endTime }
             </Text>
+            <Text>
+          <strong>Locatie:</strong> {course.location}
+        </Text>
+        <Text>
+          <strong>Prijs:</strong> {course.prijs}
+        </Text>
+        <Text>
+          <strong>Website:</strong> {course.website}
+        </Text>
+        <Text>
+          <strong>Quote: </strong> {course.quote}
+        </Text>
           </Box>
           <HStack spacing="2">
-          <Text>Docent: {course.instructor?.name || "Informatie niet beschikbaar"}</Text>
-{course.instructor?.image && (
-  <Image
-    src={course.instructor?.image}
-    alt={course.instructor?.name}
-    style={styles.imageInstrutor}
-  />
-)}
-    </HStack>
+            <Text>
+            <strong>Docent: </strong> {course.instructor?.name || "Informatie niet beschikbaar"}</Text>
+            {course.instructor?.image && (
+              <Image
+                src={course.instructor?.image}
+                alt={course.instructor?.name}
+                style={styles.imageInstrutor}
+              />
+            )}
+          </HStack>
         </VStack>
       </HStack>
     </Box>
   );
 };
-
-

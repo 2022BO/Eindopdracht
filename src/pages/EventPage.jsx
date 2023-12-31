@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Text, Container, Button, Image, ListItem, UnorderedList, Heading, useToast } from '@chakra-ui/react';
+import { Box, Text, Container, Button, Image, ListItem, UnorderedList, Heading} from '@chakra-ui/react';
 import styles from './StylePage';
 import AddCourse from './AddCourse';
+import { useParams } from 'react-router-dom';
+import { CourseDetail } from '../components/CourseDetail';
+
+
 
 const EditedDataView = ({ editedData, handleAddCourseClick, handleDeleteCourse }) => (
   <Box>
@@ -41,11 +45,19 @@ const EditedDataView = ({ editedData, handleAddCourseClick, handleDeleteCourse }
 );
 
 export const EventPage = () => {
-  const toast = useToast();
+  const { eventId } = useParams();
+  console.log('Event ID:', eventId);
   const [editMode, setEditMode] = useState(false);
   const [editedData, setEditedData] = useState({});
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [isFormOpen, setFormOpen] = useState(false);
+  
+  useEffect(() => {
+    console.log('Selected Course:', selectedCourse);
+    setEditedData(selectedCourse || {});
+  }, [selectedCourse]);
+
+  
 
   const handleEditClick = (editedData) => {
     setFormOpen(true);
@@ -61,26 +73,11 @@ export const EventPage = () => {
     setSelectedCourse(null);
   };
 
-  const handleDeleteCourse = async (courseId) => {
-    try {
-      const response = await fetch(`/api/courses/${courseId}`, {
-        method: 'DELETE',
-      });
-
-      if (response.ok) {
-        toast({ description: 'Course deleted successfully', status: 'success' });
-      } else {
-        toast({ description: 'Failed to delete course', status: 'error' });
-      }
-    } catch (error) {
-      console.error('Error deleting course:', error);
-      toast({ description: 'Oops! Delete Failed!', status: 'error' });
-    }
-  };
+  
 
   const handleSaveChanges = async (editedData) => {
     console.log('Trying to save changes for course:', editedData);
-
+  
     try {
       const response = await fetch(`/api/courses/${editedData.id}`, {
         method: 'PUT',
@@ -89,31 +86,30 @@ export const EventPage = () => {
         },
         body: JSON.stringify(editedData),
       });
-
+  
       if (response.ok) {
         setEditMode(false);
-        toast({ description: 'Course saved successfully', status: 'success' });
       } else {
-        toast({ description: 'Failed to save course changes', status: 'error' });
+        console.error('Failed to save course changes. Server returned:', response);
       }
     } catch (error) {
       console.error('Error saving course changes:', error);
-      toast({ description: 'Oops! Save Failed!', status: 'error' });
     }
   };
+  
 
-  useEffect(() => {
-    console.log('Selected Course:', selectedCourse);
-    setEditedData(selectedCourse || {});
-  }, [selectedCourse]);
-
+ 
   return (
     <Box style={styles.pageContainer}>
-      <Container style={{ ...styles.container, background: 'linear-gradient(to right, #3498db, #2ecc71)' }}>
-        <Heading style={styles.heading}>Leren & Ontwikkelen in de GGZ</Heading>
-
+      <Container style={{ ...styles.container}}>{selectedCourse && (
+  <Box mt={4}>
+    <Heading fontSize="xl">Geselecteerde Cursus</Heading>
+    <CourseDetail course={selectedCourse} />
+  </Box>
+  
+)}
         <Box style={styles.header}>
-          <h1>Welkom bij de Cursusbeheer Pagina!</h1>
+          <h1><strong>Welkom bij de Cursusbeheer Pagina!</strong></h1>
           <Text mb={4}>
             Op deze pagina kun je eenvoudig nieuwe cursussen toevoegen aan het Leren & Ontwikkelen in de GGZ-platform.
             Hier zijn de stappen om een cursus toe te voegen:
@@ -161,10 +157,15 @@ export const EventPage = () => {
               <Text mb={2} style={{ fontWeight: 'normal', fontSize: 'inherit' }}>
                 Zodra opgeslagen, kun je de details van je nieuwe cursus bekijken op de hoofdpagina.
               </Text>
+              <Text mb={2} style={{ fontWeight: 'normal', fontSize: 'inherit', fontStyle: 'italic'}}>
+              Zodra je het cursusformulier hebt ingevuld, nemen we zo snel mogelijk contact met je op om alle
+        details met betrekking tot locatie, prijs, website en een inspirerende quote met je te bespreken.
+        We kijken ernaar uit om samen met jou aan je leerreis te beginnen!
+              </Text>
             </ListItem>
           </UnorderedList>
         </Box>
-
+       
         {editMode ? (
           <EditedDataView
             editedData={editedData}
@@ -180,9 +181,12 @@ export const EventPage = () => {
           />
         )}
       </Container>
+
     </Box>
   );
 };
 
 export default EventPage;
-
+//•	The user can click on an event that leads them to the ‘Event’ page using React Router.
+//•	A query to add the event to the server is sent as well. 
+//•	A succes or fail message is shown after a successful update.
