@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Box, Image, VStack, Text, HStack} from '@chakra-ui/react';
+import { Box, Image, VStack, Text, HStack, Button} from '@chakra-ui/react';
 import styles from '../pages/StylePage';
 import { TimeIcon } from '@chakra-ui/icons';
 import { Link, useParams } from 'react-router-dom';
 
 export const CourseDetail = () => {
-  const { courseId } = useParams();
-
+  const {courseId } = useParams();
   const [course, setCourse] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState({ happened: false, msg: '' });
@@ -66,7 +65,9 @@ export const CourseDetail = () => {
 
   return (
     <Box maxW="xl" mx="auto" my="4" p="4" borderWidth="1px" borderRadius="lg" overflow="hidden"  bgColor="#8AC7DE" boxShadow="lg" >
+    <Text fontSize="xl" fontWeight="bold">Geselecteerde Cursus</Text>
     <HStack spacing="4">
+   
         <Image
           src={course.image}
           alt={course.title}
@@ -118,8 +119,12 @@ export const CourseDetail = () => {
               />
             )}
           </HStack>
-        </VStack>
+        </VStack> 
       </HStack>
+      <Text fontSize="xl" fontWeight="bold">Schrijf je nu in:</Text>
+      <Text colorScheme="blue" variant="outline" ml={4} mt={4} mr={4} mb={4}>
+                     inschrijvingcursus@email.nl
+                    </Text>
     </Box>
   );
 };

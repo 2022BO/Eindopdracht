@@ -14,11 +14,12 @@ import {
   ModalHeader,
   ModalOverlay,
   ModalCloseButton,
-  useToast,
 } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
 
 
 const AddCourse = ({handleUpdateCourses}) => {
+  const toast = useToast();
   const styles = {
     pageContainer: {
       background: 'linear-gradient(to right, #3498db, #2ecc71)',
@@ -33,6 +34,7 @@ const AddCourse = ({handleUpdateCourses}) => {
       borderRadius: '8px',
     },
   };
+
   const [courses, setCourses] = useState([]);
   const [isFormOpen, setFormOpen] = useState(false);
   const [courseData, setCourseData] = useState({
@@ -48,8 +50,6 @@ const AddCourse = ({handleUpdateCourses}) => {
 
   });
 
-  const toast = useToast();
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     console.log(`Changing ${name} to ${value}`);
@@ -62,7 +62,7 @@ const AddCourse = ({handleUpdateCourses}) => {
   const handleSaveChanges = async () => {
     try {
       const { title, image, description, startTime, endTime, instructor, categories } = courseData;
-  
+      
       const response = await fetch(`http://localhost:3000/courses`, {
         method: 'POST',
         headers: {
@@ -73,8 +73,11 @@ const AddCourse = ({handleUpdateCourses}) => {
   
       if (response.ok) {
         const newCourse = await response.json();
+        console.log('Succesvolle toevoeging van de cursus');
         handleUpdateCourses(newCourse);
   
+        setCourses((prevCourses) => [...prevCourses, newCourse]); 
+
         setCourseData({
           title: "",
           image: "",
@@ -84,14 +87,16 @@ const AddCourse = ({handleUpdateCourses}) => {
           instructor: { name: "", image: "" },
           categories: [],
         });
-  
-        setFormOpen(false);
+
+        setTimeout(() => {
+          setFormOpen(false);
+        }, 500);
   
         // Toon een succes-toast
         toast({
           title: "Cursus opgeslagen",
           status: "success",
-          duration: 3000,
+          duration: 5000,
           isClosable: true,
         });
       } else {
@@ -101,7 +106,7 @@ const AddCourse = ({handleUpdateCourses}) => {
         toast({
           title: "Fout bij opslaan cursus",
           status: "error",
-          duration: 3000,
+          duration: 5000,
           isClosable: true,
         });
       }
@@ -112,16 +117,18 @@ const AddCourse = ({handleUpdateCourses}) => {
       toast({
         title: "Oops! Er ging iets mis.",
         status: "error",
-        duration: 3000,
+        duration: 5000,
         isClosable: true,
       });
     }
+  
   };
   
   return (
+    
     <Box style={styles.pageContainer}>
       <div>
-      
+      <a id="add-course-form" tabIndex="-1" style={{ visibility: 'hidden' }}></a>
       <Button
   style={{ margin: "auto", display: "block", marginTop: "16px" }}
   onClick={() => {

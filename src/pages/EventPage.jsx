@@ -24,7 +24,6 @@ const EditedDataView = ({ editedData, handleAddCourseClick, handleDeleteCourse }
         />
       )}
     </Box>
-
     <Box style={{ ...styles.box, display: 'flex', justifyContent: 'space-between' }}>
       <Button onClick={handleAddCourseClick} style={styles.editButton}>
         Cursus toevoegen
@@ -44,20 +43,23 @@ const EditedDataView = ({ editedData, handleAddCourseClick, handleDeleteCourse }
   </Box>
 );
 
+
 export const EventPage = () => {
-  const { eventId } = useParams();
-  console.log('Event ID:', eventId);
+  const { courseId } = useParams();
+  console.log('Event ID:', courseId);
   const [editMode, setEditMode] = useState(false);
   const [editedData, setEditedData] = useState({});
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [isFormOpen, setFormOpen] = useState(false);
-  
+
+  const handleUpdateCourses = (newCourse) => {
+    console.log('handleUpdateCourses', newCourse); 
+  };
+
   useEffect(() => {
     console.log('Selected Course:', selectedCourse);
     setEditedData(selectedCourse || {});
   }, [selectedCourse]);
-
-  
 
   const handleEditClick = (editedData) => {
     setFormOpen(true);
@@ -72,8 +74,6 @@ export const EventPage = () => {
     setEditedData({});
     setSelectedCourse(null);
   };
-
-  
 
   const handleSaveChanges = async (editedData) => {
     console.log('Trying to save changes for course:', editedData);
@@ -97,18 +97,16 @@ export const EventPage = () => {
     }
   };
   
-
- 
   return (
+    <div>
     <Box style={styles.pageContainer}>
       <Container style={{ ...styles.container}}>{selectedCourse && (
   <Box mt={4}>
-    <Heading fontSize="xl">Geselecteerde Cursus</Heading>
+    
     <CourseDetail course={selectedCourse} />
   </Box>
-  
 )}
-        <Box style={styles.header}>
+        <Box style={styles.container}>
           <h1><strong>Welkom bij de Cursusbeheer Pagina!</strong></h1>
           <Text mb={4}>
             Op deze pagina kun je eenvoudig nieuwe cursussen toevoegen aan het Leren & Ontwikkelen in de GGZ-platform.
@@ -174,6 +172,7 @@ export const EventPage = () => {
           />
         ) : (
           <AddCourse
+            handleUpdateCourses={handleUpdateCourses}
             isOpen={isFormOpen}
             onClose={() => setFormOpen(false)}
             onSave={handleSaveChanges}
@@ -181,12 +180,12 @@ export const EventPage = () => {
           />
         )}
       </Container>
-
     </Box>
+    </div>
   );
 };
-
 export default EventPage;
+
 //•	The user can click on an event that leads them to the ‘Event’ page using React Router.
 //•	A query to add the event to the server is sent as well. 
 //•	A succes or fail message is shown after a successful update.

@@ -9,7 +9,8 @@ import { EventPage } from './pages/EventPage';
 import ErrorBoundary from './pages/ErrorBoundry';
 import AddCourse from './pages/AddCourse';
 import { CourseDetail } from './components/CourseDetail';
-
+import { ToastProvider } from './pages/ToastContext';
+import { useNavigate } from 'react-router-dom';
 
 const theme = extendTheme({
   config: {
@@ -38,7 +39,8 @@ const router = createBrowserRouter([
       {
         path: '/course/:courseId',
         element: <ErrorBoundary><CourseDetail /></ErrorBoundary>,
-      }
+      },
+     
     ],
   },
 ]);
@@ -46,9 +48,11 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ChakraProvider theme={theme}>
     <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+    <ToastProvider>
     <RouterProvider router={router}>
       <Root />
     </RouterProvider>
+    </ToastProvider>
   </ChakraProvider>
 );
 

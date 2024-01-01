@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AddCourse from './AddCourse';
 import { CourseDetail } from '../components/CourseDetail';
 import { AddIcon, ArrowUpIcon, SearchIcon } from '@chakra-ui/icons';
@@ -31,6 +32,7 @@ const CoursesPage = () => {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [isFormOpen, setFormOpen] = useState(false);
   const [editedData, setEditedData] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log('Selected Course:', selectedCourse);
@@ -51,12 +53,26 @@ const CoursesPage = () => {
   }, []);
 
   const handleSearch = () => {
-    const newFilteredCourses = data.courses.filter((course) =>
-      course.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const newFilteredCourses = data.courses.filter((course) => {
+      const matchesCategory =
+        selectedCategory === '' ||
+        course.categories.some((categoryId) => categoryId === selectedCategory);
+  
+      const matchesSearch =
+        course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        course.description.toLowerCase().includes(searchQuery.toLowerCase());
+  
+      return matchesCategory && matchesSearch;
+    });
+  
+    console.log('Selected Category:', selectedCategory);
+    console.log('Search Query:', searchQuery);
+    console.log('Filtered Courses:', newFilteredCourses);
+  
     setFilteredCourses(newFilteredCourses);
     setInvalidInput(newFilteredCourses.length === 0);
   };
+  
 
   const handleCourseSelection = (course) => {
     try {
@@ -67,15 +83,22 @@ const CoursesPage = () => {
     }
   };
 
+
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
   };
 
   const filterByCategory = (course) => {
-    return selectedCategory === '' || course.categories.some((category) => category.id === selectedCategory);
+    return (
+      selectedCategory === '' ||
+      course.categories.some((category) => category.id === selectedCategory)
+    );
   };
+  
+  
 
   const handleAddCourseClick = () => {
+    console.log('Handle Add Course Click');
     setFormOpen(true);
     setSelectedCourse(null);
   };
@@ -87,6 +110,7 @@ const CoursesPage = () => {
   };
 
   const handleDeleteCourse = async (courseId) => {
+    courses.preventDefault();
     const isConfirmed = window.confirm("Are you sure 100% sure you want to delete this course?");
     if (!isConfirmed) {
       return;
@@ -101,6 +125,7 @@ const CoursesPage = () => {
         const updatedCourses = courses.filter((course) => course.id !== courseId);
         setCourses(updatedCourses);
         setSelectedCourse(null);
+        navigate('/');
       } else {
         console.error('Failed to delete course. Server returned:', response);
       }
@@ -110,7 +135,6 @@ const CoursesPage = () => {
   };
 
   const filteredCoursesByCategory = filteredCourses.filter(filterByCategory);
-
   return (
     <Center h="100%" flexDir="column" style={{ ...styles.pageContainer }}>
       <Container style={{ ...styles.container }}>
@@ -132,41 +156,41 @@ const CoursesPage = () => {
               </AlertDescription>
             </Alert>
           )}
-          <VStack spacing={3} align={'stretch'} p={4}>
-            <Select placeholder="Filter op categorie" value={selectedCategory} onChange={handleCategoryChange}>
-              <option value="">Alle categorieën</option>
-              {data &&
-                data.categories &&
-                data.categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-            </Select>
-            <Input
-              type="text"
-              placeholder="Vul cursusnaam in..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <Button colorScheme="blue" mt={2} onClick={handleSearch}>
-              Zoeken <SearchIcon ml="auto" />
-            </Button>
+           <VStack spacing={3} align={'stretch'} p={4}>
+    <Select placeholder="Filter op categorie" value={selectedCategory} onChange={handleCategoryChange}>
+      <option value="">Alle categorieën</option>
+      {data &&
+        data.categories &&
+        data.categories.map((category) => (
+          <option key={category.id} value={category.id}>
+            {category.name}
+          </option>
+        ))}
+    </Select>
+    <Input
+      type="text"
+      placeholder="Vul cursusnaam in..."
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+    />
+  <Button colorScheme="blue" mt={2} onClick={handleSearch}>
+    Zoeken <SearchIcon ml="auto" />
+  </Button>
             {filteredCoursesByCategory.map((course) => (
             
-                <Box key={course.id} borderWidth="1px" borderRadius="lg" overflow="hidden" >
+            <Box key={course.id} borderWidth="1px" borderRadius="lg" overflow="hidden" padding={3} mt={2}>
                   <img src={course.image} alt={course.title} style={styles.image} />
                   <Text as="h3" fontSize="lg" fontWeight="bold" color="blue.500" mb={2}>
                     {course.title}
                   </Text>
                   <Text>
-                    <strong>Omschrijving:</strong> {course.description}
+                    <strong>Omschrijving:</strong> {course.description || "Informatie niet beschikbaar"}
                   </Text>
                   <Text>
-                    <strong>Starttijd:</strong> {course.startTime}
+                    <strong>Starttijd:</strong> {course.startTime || "Informatie niet beschikbaar"}
                   </Text>
                   <Text>
-                    <strong>Eindtijd:</strong> {course.endTime}
+                    <strong>Eindtijd:</strong> {course.endTime || "Informatie niet beschikbaar"}
                   </Text>
                   <Text>
                     <strong>Categorieën:</strong> {course.categories ? course.categories.join(', ') : 'N/A'}
@@ -186,17 +210,15 @@ const CoursesPage = () => {
                   <CourseDetail key={course.id} courseId={course.id} /> 
                 ) : (
                   <>
-                    <CourseDetail key={course.id} eventId={course.id} onSelect={() => handleCourseSelection(course)} />
+                    <CourseDetail key={course.id} courseId={course.id} onSelect={() => handleCourseSelection(course)} />
                    <Link to={`/course/${course.id}`}>
-  <Button colorScheme="blue" variant="outline" ml={4} mt={4} mr={4} mb={4}>
-    Selecteer
-  </Button>
-</Link>
-                    <Button colorScheme="red" variant="outline" ml={4} mt={4} mr={4} mb={4} onClick={() => handleDeleteCourse(course.id)}>
-                      Verwijderen
+                   <Button colorScheme="blue" variant="outline" ml={2} mt={2} mb={2}>
+                     Selecteer
                     </Button>
-        
-         
+                     </Link>
+                     <Button colorScheme="red" variant="outline" ml={2} mt={2} mb={2} onClick={() => handleDeleteCourse(course.id)}>
+                      Verwijder
+                    </Button>
                   </>
                 )}
               </Box>
@@ -211,19 +233,27 @@ const CoursesPage = () => {
             </Box>
           )}
 
-          <Box style={{ ...styles.box, display: 'flex', justifyContent: 'space-between' }}>
-            <Button colorScheme="green" mt={2} onClick={handleAddCourseClick}>
-              <Text mr={2}>Cursus toevoegen</Text>
-              <AddIcon ml="auto" />
-            </Button>
-            <Button colorScheme="blue" variant="outline" mt={2} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-              <Text mr={2}>Terug naar boven</Text>
-              <ArrowUpIcon ml="auto" />
-            </Button>
-          </Box>
+
+<Box style={{ ...styles.box, display: 'flex', justifyContent: 'space-between', flexDirection: 'column', alignItems: 'flex-start' }}>
+  <Link to="/add-course#add-course-form" style={{ textDecoration: 'none', marginBottom: '10px' }}>
+    <Button colorScheme="green" mb={2}>
+      <Text mr={2}>Ga naar cursusformulier</Text>
+      <AddIcon ml="auto" />
+    </Button>
+  </Link>
+  <Button colorScheme="blue" variant="outline" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+    <Text mr={2}>Terug naar boven</Text>
+    <ArrowUpIcon ml="auto" />
+  </Button>
+</Box>
         </Box>
         {isFormOpen && (
-          <AddCourse isOpen={isFormOpen} onClose={() => setFormOpen(false)} handleUpdateCourses={handleUpdateCourses} />
+          <AddCourse
+           isOpen={isFormOpen}
+           onClose={() => setFormOpen(false)}
+           handleUpdateCourses={handleUpdateCourses} 
+           handleAddCourseClick={handleAddCourseClick}  />
+
         )}
       </Container>
     </Center>
