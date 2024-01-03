@@ -14,7 +14,6 @@ export const CourseDetail = () => {
   useEffect(() => {
     setIsLoading(true);
     setError({ happened: false, msg: '' });
-
     const fetchNewCourse = async () => {
       try {
         const response = await fetch(`http://localhost:3000/courses/${courseId}`);

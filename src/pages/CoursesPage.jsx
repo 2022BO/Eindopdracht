@@ -25,19 +25,32 @@ import styles from './StylePage';
 const CoursesPage = () => {
   const [courses, setCourses] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
   const [invalidInput, setInvalidInput] = useState(false);
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [data, setData] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [isFormOpen, setFormOpen] = useState(false);
   const [editedData, setEditedData] = useState({});
   const navigate = useNavigate();
+  const [selectedCategoryId, setSelectedCategoryId] = useState('');
+  const [categories, setCategories] = useState ([]);
 
+  
   useEffect(() => {
-    console.log('Selected Course:', selectedCourse);
-    setEditedData(selectedCourse || {});
-  }, [selectedCourse]);
+    if (data && data.courses) {
+      // Schoonmaken van categorieën
+      const cleanedCourses = data.courses.map(course => ({
+        ...course,
+        categories: course.categories.map(category => category.replace(/"/g, '').trim())
+      }));
+  
+      setCourses(cleanedCourses);
+    }
+    if (data && data.categories) {
+      setCategories(data.categories);
+    }
+  }, [data]);
 
   useEffect(() => {
     fetch('/events.json')
@@ -45,34 +58,71 @@ const CoursesPage = () => {
       .then((jsonData) => {
         console.log('Received data:', jsonData);
         setData(jsonData);
-        if (jsonData.courses) {
-          setFilteredCourses(jsonData.courses);
-        }
+        setFilteredCourses(jsonData.courses);  
       })
       .catch((error) => console.error('Error fetching JSON data:', error));
   }, []);
 
+  const filterCourses = (course) => {
+    // Filter op categorieën
+    const matchesCategory = !selectedCategory || course.categories.includes(selectedCategory);
+  
+    // Filter op zoekopdracht
+    const matchesSearch = (
+      course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      course.description.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  
+    // Zorg ervoor dat zowel categorieën als zoekopdracht overeenkomen
+    return matchesCategory && matchesSearch;
+  };
+  
+
+ 
+
   const handleSearch = () => {
-    const newFilteredCourses = data.courses.filter((course) => {
+  console.log('Courses:', courses);
+  console.log('Selected Category:', selectedCategory);
+  console.log('Search Query:', searchQuery.trim());
+  console.log('Search Query in handleSearch:', searchQuery);
+
+
+    console.log('Courses Categories:', courses.map(course => course.categories));
+    setFilteredCourses(courses);
+
+    const newFilteredCourses = courses.filter((course) => {
+      console.log('Course:', course);
+  
       const matchesCategory =
         selectedCategory === '' ||
-        course.categories.some((categoryId) => categoryId === selectedCategory);
+        course.categories.some(
+          (category) => category.toLowerCase() === selectedCategory.toLowerCase()
+        );
   
-      const matchesSearch =
+        const matchesSearch =
         course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        course.description.toLowerCase().includes(searchQuery.toLowerCase());
+        course.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        course.categories.some(category =>
+          category.toLowerCase().includes(searchQuery.toLowerCase())
+        );
   
+        console.log('Search Query:', searchQuery);
+        console.log('Course Title:', course.title);
+        console.log('Course Description:', course.description);
+        console.log('Course Categories:', course.categories);
+        console.log('Matches Search:', matchesSearch);
+      
       return matchesCategory && matchesSearch;
+
     });
-  
-    console.log('Selected Category:', selectedCategory);
-    console.log('Search Query:', searchQuery);
     console.log('Filtered Courses:', newFilteredCourses);
-  
     setFilteredCourses(newFilteredCourses);
     setInvalidInput(newFilteredCourses.length === 0);
   };
   
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.target.value);
+  };
 
   const handleCourseSelection = (course) => {
     try {
@@ -82,20 +132,12 @@ const CoursesPage = () => {
       console.error('Error selecting course:', error);
     }
   };
-
-
-  const handleCategoryChange = (event) => {
-    setSelectedCategory(event.target.value);
-  };
-
   const filterByCategory = (course) => {
     return (
-      selectedCategory === '' ||
-      course.categories.some((category) => category.id === selectedCategory)
+      selectedCategoryId === '' ||
+      course.categories.some((category) => category === selectedCategoryId)
     );
   };
-  
-  
 
   const handleAddCourseClick = () => {
     console.log('Handle Add Course Click');
@@ -156,22 +198,30 @@ const CoursesPage = () => {
               </AlertDescription>
             </Alert>
           )}
-           <VStack spacing={3} align={'stretch'} p={4}>
-    <Select placeholder="Filter op categorie" value={selectedCategory} onChange={handleCategoryChange}>
-      <option value="">Alle categorieën</option>
-      {data &&
-        data.categories &&
-        data.categories.map((category) => (
-          <option key={category.id} value={category.id}>
-            {category.name}
-          </option>
-        ))}
-    </Select>
+          <VStack spacing={3} align={'stretch'} p={4}>
+          <Select
+  placeholder="Filter op categorie"
+  value={selectedCategory}
+  onChange={handleCategoryChange}
+>
+  <option value="">Alle categorieën</option>
+  {data &&
+    data.categories &&
+    data.categories.map((category) => (
+      <option key={category.id} value={category.name}>
+        {category.name}
+      </option>
+    ))}
+</Select>
     <Input
       type="text"
       placeholder="Vul cursusnaam in..."
       value={searchQuery}
-      onChange={(e) => setSearchQuery(e.target.value)}
+      onChange={(e) => {
+        console.log('Input Change Event:', e.target.value);
+        setSearchQuery(e.target.value)}
+      }
+   
     />
   <Button colorScheme="blue" mt={2} onClick={handleSearch}>
     Zoeken <SearchIcon ml="auto" />

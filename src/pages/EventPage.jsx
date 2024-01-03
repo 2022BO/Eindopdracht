@@ -75,6 +75,7 @@ export const EventPage = () => {
     setSelectedCourse(null);
   };
 
+  
   const handleSaveChanges = async (editedData) => {
     console.log('Trying to save changes for course:', editedData);
   

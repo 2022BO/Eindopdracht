@@ -1,6 +1,7 @@
 const styles = {
   
   pageContainer: {
+    maxWidth: '100%',
     background: 'linear-gradient(to right, #3498db, #2ecc71)',
     minHeight: '100vh',
     display: 'flex',
@@ -23,7 +24,7 @@ const styles = {
     fontFamily: 'Arial, sans-serif',
     color: '#fff',
     borderRadius: '8px',
-    background: 'linear-gradient(to right, #3498db, #2ecc71)', // Corrected
+    background: 'linear-gradient(to right, #3498db, #2ecc71)', 
   },
 
  heading: {
