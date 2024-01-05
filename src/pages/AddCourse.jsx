@@ -132,7 +132,6 @@ const AddCourse = ({handleUpdateCourses}) => {
       <Button
   style={{ margin: "auto", display: "block", marginTop: "16px" }}
   onClick={() => {
-    console.log("Opening form");
     setFormOpen(true);
   }}
 >

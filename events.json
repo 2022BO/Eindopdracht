@@ -50,7 +50,6 @@
         "image": "https://www.tivolivredenburg.nl/wp-content/uploads/2021/04/JohnSmithbyEllyLucas55-2000x1284.png"
       }
     },
- 
     {
       "id": 4,
       "title": "Stressbeheer bij Ouderen",
@@ -166,9 +165,7 @@
         "geestelijke gezondheid"
       ],
       "image": "https://www.despreker.nl/wp-content/uploads/2017/09/Sierd-Nutma-Mentale-Veerkracht-voor-Professionals.jpg.webp"
-      
     },
-    
     {
       "id": 15,
       "title": "Complexe psychiatrie in de ouderenzorg",
@@ -189,8 +186,6 @@
         "geestelijke gezondheid"
       ],
       "image": "https://www.medilex.nl/site/images/cache/401/301/Congresses-3333-attachment1_iStock-907482380.jpg"
-    
-      
     },
     {
       "id": 16,
@@ -207,8 +202,6 @@
         "kind en jeugd"
       ],
       "image": "https://www.medilex.nl/site/images/cache/401/301/Congresses-3597-attachment1_cursushechtingafbeelding.jpg"
-   
-      
     },
     {
       "id": 17,
@@ -227,7 +220,24 @@
         "kind en jeugd"
       ],
       "image": "https://www.medilex.nl/site/images/cache/401/301/Congresses-3135-attachment1_Plaatjewebsite.jpg"
-      
+    },
+    {
+      "title": "Basiscursus cognitieve gedragstherapie - Inleiding",
+      "description": "Hoe werk je professioneel met cognitieve gedragstherapie (CGT)? In dit inleidende deel van de basiscursus ga je praktisch aan de slag met elementen uit het gedragstherapeutisch proces en oefen je het ontwerpen van functie- en betekenisanalyses en therapieplannen. Met deze kennis en vaardigheden kun je zelfstandig onder supervisie de leerprincipes van cognitieve gedragstherapie toepassen. ",
+      "startTime": "10:00",
+      "endTime": "12:00",
+      "email": "babetteklarenbeek@test.nl",
+      "phone": "",
+      "message": "",
+      "instructor": {
+        "name": "Babette Klarenbeek",
+        "image": "data:image/jpeg;base64,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"
+      },
+      "categories": [
+        "geestelijke gezondheid"
+      ],
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxbBjU-bT8BD3dqVS3ioCizEAbPHDFOu_jcQ&usqp=CAU",
+      "id": 18
     }
   ],
   "categories": [

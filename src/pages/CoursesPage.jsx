@@ -31,7 +31,6 @@ const CoursesPage = () => {
   const [data, setData] = useState(null);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [isFormOpen, setFormOpen] = useState(false);
-  const [editedData, setEditedData] = useState({});
   const navigate = useNavigate();
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
   const [categories, setCategories] = useState ([]);
@@ -76,16 +75,9 @@ const CoursesPage = () => {
     // Zorg ervoor dat zowel categorieën als zoekopdracht overeenkomen
     return matchesCategory && matchesSearch;
   };
-  
-
  
-
   const handleSearch = () => {
-  console.log('Courses:', courses);
-  console.log('Selected Category:', selectedCategory);
-  console.log('Search Query:', searchQuery.trim());
-  console.log('Search Query in handleSearch:', searchQuery);
-
+  
 
     console.log('Courses Categories:', courses.map(course => course.categories));
     setFilteredCourses(courses);
@@ -106,11 +98,6 @@ const CoursesPage = () => {
           category.toLowerCase().includes(searchQuery.toLowerCase())
         );
   
-        console.log('Search Query:', searchQuery);
-        console.log('Course Title:', course.title);
-        console.log('Course Description:', course.description);
-        console.log('Course Categories:', course.categories);
-        console.log('Matches Search:', matchesSearch);
       
       return matchesCategory && matchesSearch;
 
@@ -126,7 +113,6 @@ const CoursesPage = () => {
 
   const handleCourseSelection = (course) => {
     try {
-      console.log('Course selected:', course);
       setSelectedCourse(course);
     } catch (error) {
       console.error('Error selecting course:', error);
@@ -140,7 +126,6 @@ const CoursesPage = () => {
   };
 
   const handleAddCourseClick = () => {
-    console.log('Handle Add Course Click');
     setFormOpen(true);
     setSelectedCourse(null);
   };
@@ -152,7 +137,6 @@ const CoursesPage = () => {
   };
 
   const handleDeleteCourse = async (courseId) => {
-    courses.preventDefault();
     const isConfirmed = window.confirm("Are you sure 100% sure you want to delete this course?");
     if (!isConfirmed) {
       return;
@@ -221,7 +205,6 @@ const CoursesPage = () => {
         console.log('Input Change Event:', e.target.value);
         setSearchQuery(e.target.value)}
       }
-   
     />
   <Button colorScheme="blue" mt={2} onClick={handleSearch}>
     Zoeken <SearchIcon ml="auto" />
@@ -229,7 +212,8 @@ const CoursesPage = () => {
             {filteredCoursesByCategory.map((course) => (
             
             <Box key={course.id} borderWidth="1px" borderRadius="lg" overflow="hidden" padding={3} mt={2}>
-                  <img src={course.image} alt={course.title} style={styles.image} />
+                  <img src={course.image} alt={course.title} style={styles.image} 
+                  />
                   <Text as="h3" fontSize="lg" fontWeight="bold" color="blue.500" mb={2}>
                     {course.title}
                   </Text>
