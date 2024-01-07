@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Text, Container, Button, Image, ListItem, UnorderedList, Heading} from '@chakra-ui/react';
+import { Box, Text, Container, Button, Image, ListItem, UnorderedList, Link} from '@chakra-ui/react';
 import styles from './StylePage';
 import AddCourse from './AddCourse';
-import { useParams } from 'react-router-dom';
 import { CourseDetail } from '../components/CourseDetail';
 
 
@@ -45,33 +44,25 @@ const EditedDataView = ({ editedData, handleAddCourseClick, handleDeleteCourse }
 
 
 export const EventPage = () => {
-  const { courseId } = useParams();
-  console.log('Event ID:', courseId);
   const [editMode, setEditMode] = useState(false);
-  const [editedData, setEditedData] = useState({});
+  const [editedData, setEditedData] = useState('');
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [isFormOpen, setFormOpen] = useState(false);
+  
+
 
   const handleUpdateCourses = (newCourse) => {
     console.log('handleUpdateCourses', newCourse); 
   };
-
+  
   useEffect(() => {
-    console.log('Selected Course:', selectedCourse);
     setEditedData(selectedCourse || {});
   }, [selectedCourse]);
-
-  const handleEditClick = (editedData) => {
-    setFormOpen(true);
-    setEditMode(true);
-    setEditedData(editedData);
-    setSelectedCourse(editedData);
-  };
 
   const handleAddCourseClick = () => {
     setEditMode(true);
     setFormOpen(true);
-    setEditedData({});
+    setEditedData('');
     setSelectedCourse(null);
   };
 
@@ -89,6 +80,7 @@ export const EventPage = () => {
       });
   
       if (response.ok) {
+        handleUpdateCourses(editedData);
         setEditMode(false);
       } else {
         console.error('Failed to save course changes. Server returned:', response);
@@ -164,12 +156,12 @@ export const EventPage = () => {
             </ListItem>
           </UnorderedList>
         </Box>
-       
+        
         {editMode ? (
           <EditedDataView
             editedData={editedData}
             handleAddCourseClick={handleAddCourseClick}
-            handleDeleteCourse={handleDeleteCourse}
+            handleDeleteCourse={handleSaveChanges}
           />
         ) : (
           <AddCourse

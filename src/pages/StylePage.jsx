@@ -6,13 +6,14 @@ const styles = {
     minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
-    padding: '10px',
+    padding: '2px',
+    fontSize: 13,
     
   },
   editContainer: {
     padding: '10px',
     borderRadius: '5px',
-    margin: '20px',
+    margin: '10px',
     border: '1px solid #ccc',
     
   },

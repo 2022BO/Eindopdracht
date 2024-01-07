@@ -1,76 +1,59 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState} from 'react';
 import { Box, Image, VStack, Text, HStack} from '@chakra-ui/react';
 import styles from '../pages/StylePage';
 import { TimeIcon } from '@chakra-ui/icons';
 import { Link, useParams } from 'react-router-dom';
 
-
 export const CourseDetail = () => {
   const {courseId } = useParams();
- 
-  console.log('courseId:', courseId);
-
   const [course, setCourse] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState({ happened: false, msg: '' });
-  const isMountedRef = useRef(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (!courseId) {
-        setIsLoading(false);
-        return;
-      }
-  
-      setIsLoading(true);
-      setError({ happened: false, msg: '' });
-  
-      try {
-        const response = await fetch(`http://localhost:3000/courses/${courseId}`);
-  
-        if (!response.ok) {
-          console.log("Error response:", response.status);
-          setError({
-            happened: true,
-            msg: `${response.status}: ${response.statusText}`,
-          });
-          setIsLoading(false);
-          return;
-        }
-  
-        const fetchedCourse = await response.json();
-  
-        if (isMountedRef.current) {
-          console.log("Setting course data:", fetchedCourse);
-          setCourse(fetchedCourse);
-          setIsLoading(false);
-        }
-      } catch (err) {
-        console.error("Error fetching data:", err.message);
-        setError({
-          happened: true,
-          msg: err.message,
-        });
-  
-        if (isMountedRef.current) {
-          setIsLoading(false);
-        }
-      }
-    };
-  
-    fetchData();
-  
-    return () => {
-      console.log("Cleanup");
-      isMountedRef.current = false;
-    };
-  }, [courseId]);
-  
-  
+    if (!courseId) {
+      return;
+    }
 
-  if (isLoading || !course) {
-    return <p>Loading...</p>;
+let ignore = false;
+setError(null);
+async function fetchData() {
+  try {
+    const response = await fetch(`http://localhost:3000/courses/${courseId}`);
+
+  if (response.ok) {
+    const course = await response.json ();
+    if (!ignore){
+      setCourse(course);
+      setIsLoading(false);
+    }
+  } else {
+    setError(`Something went wrong: ${response.statusText}`);
   }
+  }catch (error){
+  setError (`Error fetching data: ${error.message}`);
+  }
+}
+
+fetchData ();
+
+return () => {
+  ignore = true;
+};
+
+  }, [courseId]);
+
+if (isLoading) {
+  return <p>Loading...</p>;
+}
+
+if (error) {
+  return <p>{error}</p>;
+}
+
+if (!course) {
+  return <p>Course not found</p>;
+}
 
   const { title, description, image, categories, startTime, endTime, instructor } = course;
   const categoriesContent = categories ? categories.join(', ') : 'N/A';

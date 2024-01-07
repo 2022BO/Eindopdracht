@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Navigation } from '../components/Navigation'; 
 import AddCourse from './AddCourse';
 import { CourseDetail } from '../components/CourseDetail';
 import { AddIcon, ArrowUpIcon, SearchIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
+import { useToast } from '@chakra-ui/react';
 import {
   Heading,
   Container,
@@ -22,7 +24,8 @@ import {
 } from '@chakra-ui/react';
 import styles from './StylePage';
 
-const CoursesPage = () => {
+
+const CoursesPage =({courseId}) => {
   const [courses, setCourses] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -34,6 +37,7 @@ const CoursesPage = () => {
   const navigate = useNavigate();
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
   const [categories, setCategories] = useState ([]);
+  const toast = useToast();
 
   
   useEffect(() => {
@@ -57,32 +61,31 @@ const CoursesPage = () => {
       .then((jsonData) => {
         console.log('Received data:', jsonData);
         setData(jsonData);
-        setFilteredCourses(jsonData.courses);  
+        setFilteredCourses(jsonData.courses || []);
       })
       .catch((error) => console.error('Error fetching JSON data:', error));
   }, []);
 
-  const filterCourses = (course) => {
+  const availableCourses = (course) => {
     // Filter op categorieën
     const matchesCategory = !selectedCategory || course.categories.includes(selectedCategory);
   
     // Filter op zoekopdracht
-    const matchesSearch = (
+    const matchesSearch = availableCourses.filter((course)=>{
       course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       course.description.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    }
+    );   
   
     // Zorg ervoor dat zowel categorieën als zoekopdracht overeenkomen
     return matchesCategory && matchesSearch;
   };
  
   const handleSearch = () => {
-  
-
     console.log('Courses Categories:', courses.map(course => course.categories));
     setFilteredCourses(courses);
 
-    const newFilteredCourses = courses.filter((course) => {
+    const newFilteredCourses = filteredCourses.filter((course) => {
       console.log('Course:', course);
   
       const matchesCategory =
@@ -97,8 +100,7 @@ const CoursesPage = () => {
         course.categories.some(category =>
           category.toLowerCase().includes(searchQuery.toLowerCase())
         );
-  
-      
+ 
       return matchesCategory && matchesSearch;
 
     });
@@ -126,6 +128,7 @@ const CoursesPage = () => {
   };
 
   const handleAddCourseClick = () => {
+    navigate('/add-course-form');
     setFormOpen(true);
     setSelectedCourse(null);
   };
@@ -134,10 +137,11 @@ const CoursesPage = () => {
     // Voeg de nieuwe cursus toe aan de lijst met cursussen of voer andere logica uit om de cursus bij te werken
     const updatedCourses = [...courses, newCourse];
     setCourses(updatedCourses);
+    setNotification("Cursus succesvol toegevoegd/verwijderd");
   };
 
   const handleDeleteCourse = async (courseId) => {
-    const isConfirmed = window.confirm("Are you sure 100% sure you want to delete this course?");
+    const isConfirmed = window.confirm("Weet je 100% zeker dat je deze cursus wilt verwijderen?");
     if (!isConfirmed) {
       return;
     }
@@ -148,18 +152,28 @@ const CoursesPage = () => {
 
       if (response.ok) {
         // Verwijder de cursus uit de lijst
-        const updatedCourses = courses.filter((course) => course.id !== courseId);
-        setCourses(updatedCourses);
+        setCourses((prevCourses) => prevCourses.filter((course) => course.id !== courseId));
         setSelectedCourse(null);
+        handleShowNotification("Cursus succesvol verwijderd", "success");
         navigate('/');
       } else {
         console.error('Failed to delete course. Server returned:', response);
+        handleShowNotification("Fout bij het verwijderen van de cursus", "error");
       }
     } catch (error) {
       console.error('Error deleting course:', error);
+      handleShowNotification("Fout bij het verwijderen van de cursus", "error");
     }
   };
-
+  const handleShowNotification = (message, status) => {
+    toast({
+      title: message,
+      status: status,
+      duration: 5000,
+      isClosable: true,
+    });
+  };
+  
   const filteredCoursesByCategory = filteredCourses.filter(filterByCategory);
   return (
     <Center h="100%" flexDir="column" style={{ ...styles.pageContainer }}>
@@ -230,7 +244,7 @@ const CoursesPage = () => {
                     <strong>Categorieën:</strong> {course.categories ? course.categories.join(', ') : 'N/A'}
                   </Text>
                   <Text>
-      Docent: {course.instructor?.name || "Informatie niet beschikbaar"}
+                  <strong>Docent:</strong> {course.instructor?.name || "Informatie niet beschikbaar"}
     </Text>
     {course.instructor?.image && (
   <Image
@@ -267,14 +281,8 @@ const CoursesPage = () => {
             </Box>
           )}
 
-
+  <Navigation setFormOpen={setFormOpen} handleAddCourseClick={handleAddCourseClick}/>
 <Box style={{ ...styles.box, display: 'flex', justifyContent: 'space-between', flexDirection: 'column', alignItems: 'flex-start' }}>
-  <Link to="/add-course#add-course-form" style={{ textDecoration: 'none', marginBottom: '10px' }}>
-    <Button colorScheme="green" mb={2}>
-      <Text mr={2}>Ga naar cursusformulier</Text>
-      <AddIcon ml="auto" />
-    </Button>
-  </Link>
   <Button colorScheme="blue" variant="outline" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
     <Text mr={2}>Terug naar boven</Text>
     <ArrowUpIcon ml="auto" />
