@@ -5,14 +5,18 @@ import AddCourse from './AddCourse';
 import { CourseDetail } from '../components/CourseDetail';
 import { AddIcon, ArrowUpIcon, SearchIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
+import styles from './StylePage';
 import { useToast } from '@chakra-ui/react';
 import {
   Heading,
-  Container,
+  Flex,
+  Wrap,
+  WrapItem,
   Box,
   Button,
   Center,
   VStack,
+  HStack,
   Text,
   Input,
   Image,
@@ -22,10 +26,10 @@ import {
   AlertTitle,
   AlertDescription,
 } from '@chakra-ui/react';
-import styles from './StylePage';
 
 
-const CoursesPage =({courseId}) => {
+
+  const CoursesPage =({courseId}) => {
   const [courses, setCourses] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -177,8 +181,7 @@ const CoursesPage =({courseId}) => {
   const filteredCoursesByCategory = filteredCourses.filter(filterByCategory);
   return (
     <Center h="100%" flexDir="column" style={{ ...styles.pageContainer }}>
-      <Container style={{ ...styles.container }}>
-        <Box style={styles.box}>
+      <Box style={styles.box}>
           <Heading style={styles.heading}>Leren & Ontwikkelen in de GGZ</Heading>
           {invalidInput && (
             <Alert status="error">
@@ -223,9 +226,23 @@ const CoursesPage =({courseId}) => {
   <Button colorScheme="blue" mt={2} onClick={handleSearch}>
     Zoeken <SearchIcon ml="auto" />
   </Button>
+  <Flex
+            wrap="wrap"
+            justify="space-between"
+            align="stretch"
+            spacing={4}
+            direction={{ base: 'column', md: 'row' }}
+          >
             {filteredCoursesByCategory.map((course) => (
-            
-            <Box key={course.id} borderWidth="1px" borderRadius="lg" overflow="hidden" padding={3} mt={2}>
+            <Box  key={course.id}
+            borderWidth="1px"
+            borderRadius="lg"
+            overflow="hidden"
+            padding={3}
+            mt={2}
+            width={{ base: '100%', md: '30%' }}
+            mx={{ base: 0, md: 3 }}
+             >
                   <img src={course.image} alt={course.title} style={styles.image} 
                   />
                   <Text as="h3" fontSize="lg" fontWeight="bold" color="blue.500" mb={2}>
@@ -253,7 +270,9 @@ const CoursesPage =({courseId}) => {
     alt={course.instructor?.name}
     style={styles.imageInstrutor}
   />
+  
 )}
+
                 {course.id === selectedCourse?.id ? (
                   <CourseDetail key={course.id} courseId={course.id} /> 
                 ) : (
@@ -271,8 +290,9 @@ const CoursesPage =({courseId}) => {
                 )}
               </Box>
             ))}
+            </Flex>
           </VStack>
-
+         
           {/* Display the selected course details */}
           {selectedCourse && (
             <Box mt={4}>
@@ -297,7 +317,7 @@ const CoursesPage =({courseId}) => {
            handleAddCourseClick={handleAddCourseClick}  />
 
         )}
-      </Container>
+    
     </Center>
   );
 };

@@ -21,7 +21,7 @@ const styles = {
   container: {
     maxWidth: '100%',
     margin: 'auto',
-    padding: '20px',
+    padding: '10px',
     fontFamily: 'Arial, sans-serif',
     color: '#fff',
     borderRadius: '8px',
@@ -40,8 +40,8 @@ const styles = {
 box:
  {
   background: 'linear-gradient(to right, #87CEEB, #3CB371)',
-  padding: '15px', 
-  margin: '10px',
+  padding: '3px', 
+  margin: '3px',
   borderRadius: '8px',
   
 },
@@ -69,14 +69,6 @@ imageInstrutor:{
 cancelButton: {
     marginRight: '30px',
 },
-  
-courseDetailBox: {
-  maxWidth: '90%', 
-  margin: 'auto',
-  marginBottom: '20px',
-  borderRadius: '8px',
-},
-
     
 };
  export default styles;
