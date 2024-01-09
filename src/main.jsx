@@ -10,7 +10,7 @@ import { EventPage } from './pages/EventPage';
 import AddCourse from './pages/AddCourse';
 import { CourseDetail } from './components/CourseDetail';
 import { ToastProvider } from './pages/ToastContext';
-import { useNavigate } from 'react-router-dom';
+import InformationAndContactPage from './components/Contact'; 
 
 const theme = extendTheme({
   config: {
@@ -39,6 +39,10 @@ const router = createBrowserRouter([
       {
         path: '/course/:courseId',
         element: <ErrorBoundary><CourseDetail /></ErrorBoundary>,
+      },
+      {
+        path: '/information-and-contact',
+        element: <ErrorBoundary><InformationAndContactPage /></ErrorBoundary>,
       },
     ],
   },

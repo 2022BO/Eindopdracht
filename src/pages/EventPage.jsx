@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Text, Container, Button, Image, ListItem, UnorderedList, Link} from '@chakra-ui/react';
+import { Box, Text, Container, Button, Image} from '@chakra-ui/react';
 import styles from './StylePage';
 import AddCourse from './AddCourse';
 import { CourseDetail } from '../components/CourseDetail';
-
-
 
 const EditedDataView = ({ editedData, handleAddCourseClick, handleDeleteCourse }) => (
   <Box>
@@ -48,9 +46,6 @@ export const EventPage = () => {
   const [editedData, setEditedData] = useState('');
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [isFormOpen, setFormOpen] = useState(false);
-  
-
-
   const handleUpdateCourses = (newCourse) => {
     console.log('handleUpdateCourses', newCourse); 
   };
@@ -66,7 +61,6 @@ export const EventPage = () => {
     setSelectedCourse(null);
   };
 
-  
   const handleSaveChanges = async (editedData) => {
     console.log('Trying to save changes for course:', editedData);
   
@@ -89,7 +83,8 @@ export const EventPage = () => {
       console.error('Error saving course changes:', error);
     }
   };
-  
+
+
   return (
     <div>
     <Box style={styles.pageContainer}>
@@ -98,65 +93,7 @@ export const EventPage = () => {
     
     <CourseDetail course={selectedCourse} />
   </Box>
-)}
-        <Box style={styles.container}>
-          <h1><strong>Welkom bij de Cursusbeheer Pagina!</strong></h1>
-          <Text mb={4}>
-            Op deze pagina kun je eenvoudig nieuwe cursussen toevoegen aan het Leren & Ontwikkelen in de GGZ-platform.
-            Hier zijn de stappen om een cursus toe te voegen:
-          </Text>
-          <Text mb={4}>
-            Ontdek hier hoe je nieuwe cursussen kunt toevoegen en beheren op het platform voor Leren & Ontwikkelen in de GGZ.
-          </Text>
-          <Text mb={4}>
-            Leer hoe je eenvoudig relevante informatie invoert en je bijdrage levert aan een groeiende educatieve community!
-          </Text>
-          <UnorderedList>
-            <ListItem style={{ fontSize: '1em', fontWeight: 'bold' }}>
-              Navigeer naar "Cursus Toevoegen"
-              <Text mb={2} style={{ fontWeight: 'normal', fontSize: 'inherit' }}>
-                Klik op de knop "Cursus Toevoegen" om te beginnen met het invoeren van gegevens voor je nieuwe cursus.
-              </Text>
-            </ListItem>
-            <ListItem style={{ fontSize: '1em', fontWeight: 'bold' }}>
-              Vul de Cursusinformatie in
-              <Text mb={2} style={{ fontWeight: 'normal', fontSize: 'inherit' }}>
-                Voer de vereiste gegevens in, zoals titel, beschrijving, starttijd, eindtijd, categorieën, instructeur en instructeursafbeelding.
-                Je kunt optionele velden ook invullen om meer details toe te voegen.
-              </Text>
-            </ListItem>
-            <ListItem style={{ fontSize: '1em', fontWeight: 'bold' }}>
-              Kies Categorieën"
-              <Text mb={2} style={{ fontWeight: 'normal', fontSize: 'inherit' }}>
-                Selecteer de relevante categorieën voor je cursus, zoals "geestelijke gezondheid", "kind en jeugd" of "professionele ontwikkeling".
-              </Text>
-            </ListItem>
-            <ListItem style={{ fontSize: '1em', fontWeight: 'bold' }}>
-              Docent informatie
-              <Text mb={2} style={{ fontWeight: 'normal', fontSize: 'inherit' }}>
-                Voer de naam van de instructeur in en voeg indien mogelijk een afbeelding toe voor een persoonlijk tintje.
-              </Text>
-            </ListItem>
-            <ListItem style={{ fontSize: '1em', fontWeight: 'bold' }}>
-              Bewaar je Nieuwe Cursus
-              <Text mb={2} style={{ fontWeight: 'normal', fontSize: 'inherit' }}>
-                Klik op "Opslaan" om je nieuwe cursus aan het platform toe te voegen.
-              </Text>
-            </ListItem>
-            <ListItem style={{ fontSize: '1em', fontWeight: 'bold' }}>
-              Bekijk je resultaat
-              <Text mb={2} style={{ fontWeight: 'normal', fontSize: 'inherit' }}>
-                Zodra opgeslagen, kun je de details van je nieuwe cursus bekijken op de hoofdpagina.
-              </Text>
-              <Text mb={2} style={{ fontWeight: 'normal', fontSize: 'inherit', fontStyle: 'italic'}}>
-              Zodra je het cursusformulier hebt ingevuld, nemen we zo snel mogelijk contact met je op om alle
-        details met betrekking tot locatie, prijs, website en een inspirerende quote met je te bespreken.
-        We kijken ernaar uit om samen met jou aan je leerreis te beginnen!
-              </Text>
-            </ListItem>
-          </UnorderedList>
-        </Box>
-        
+)}      
         {editMode ? (
           <EditedDataView
             editedData={editedData}

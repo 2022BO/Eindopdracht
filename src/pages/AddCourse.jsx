@@ -1,12 +1,20 @@
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import styles from './StylePage';
+import Footer from '../components/Footer';
 import {
   Box,
   Button,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Heading,
   FormControl,
   FormLabel,
   FormHelperText,
   Textarea,
+  Text,
   Input,
   Modal,
   ModalBody,
@@ -144,14 +152,34 @@ const AddCourse = ({ handleUpdateCourses }) => {
 
   return (
     <Box style={styles.pageContainer}>
-      <Button
-  style={{ margin: "auto", display: "block", marginTop: "16px" }}
-  onClick={() => {
-    setFormOpen(true);
-  }}
->
-  Ga naar cursusformulier
-</Button>
+ <Card align='center' style={styles.box}>
+  <CardHeader>
+  <Heading size='md' style={styles.heading}>
+  Cursus Aanmelden
+        </Heading>
+  </CardHeader>
+  <CardBody>
+    <Text> Vul het onderstaande formulier in om je cursus aan te melden. We nemen contact met je op voor verdere details en goedkeuring.</Text>
+    <Text> Als je meer informatie wil over je de cursus kan toevoegen kijk bij de Informatie contact pagina </Text>
+  </CardBody>
+  <CardFooter>
+  <Button
+    style={{
+      ...styles.cancelButton,
+      backgroundColor: '#4CAF50', 
+      color: '#fff', 
+      margin: 'auto',
+      display: 'block',
+      marginTop: '16px',
+    }}
+    onClick={() => {
+      setFormOpen(true);
+    }}
+  >
+    Aanmeldformulier invullen
+  </Button>
+</CardFooter>
+</Card>
 {isFormOpen && (
   <Modal isOpen={true} onClose={() => setFormOpen(false)}>
     <ModalOverlay />
@@ -291,6 +319,7 @@ const AddCourse = ({ handleUpdateCourses }) => {
             </ModalContent>
           </Modal>
         )}
+        <Footer /> 
     </Box>
   );
 };

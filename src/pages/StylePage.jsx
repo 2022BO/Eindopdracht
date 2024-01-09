@@ -6,10 +6,9 @@ const styles = {
     minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
-    padding: '2px',
     fontSize: 13,
-    
   },
+  
   editContainer: {
     padding: '10px',
     borderRadius: '5px',

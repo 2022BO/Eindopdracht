@@ -22,10 +22,11 @@ export const Navigation = ({ courseId}) => {
         Cursuscatalogus
       </Link>
       <Link to={`/event/${courseId}`} style={{ ...linkStyle, marginLeft: '20px' }}>
-        Cursus Informatie
+      Cursus Aanmelden
       </Link>
- 
-
+      <Link to="/information-and-contact" style={{ ...linkStyle, marginLeft: '20px' }}>
+      Informatie & contact
+      </Link>
     </nav>
   );
 };

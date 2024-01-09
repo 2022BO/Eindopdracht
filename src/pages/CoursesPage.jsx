@@ -3,20 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import { Navigation } from '../components/Navigation'; 
 import AddCourse from './AddCourse';
 import { CourseDetail } from '../components/CourseDetail';
-import { AddIcon, ArrowUpIcon, SearchIcon } from '@chakra-ui/icons';
+import { TimeIcon, ArrowUpIcon, SearchIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
 import styles from './StylePage';
 import { useToast } from '@chakra-ui/react';
+import Footer from '../components/Footer';
 import {
   Heading,
   Flex,
-  Wrap,
-  WrapItem,
   Box,
   Button,
   Center,
   VStack,
-  HStack,
   Text,
   Input,
   Image,
@@ -26,8 +24,6 @@ import {
   AlertTitle,
   AlertDescription,
 } from '@chakra-ui/react';
-
-
 
   const CoursesPage =({courseId}) => {
   const [courses, setCourses] = useState([]);
@@ -81,7 +77,7 @@ import {
     }
     );   
   
-    // Zorg ervoor dat zowel categorieën als zoekopdracht overeenkomen
+    // Zorgt ervoor dat zowel categorieën als zoekopdracht overeenkomen
     return matchesCategory && matchesSearch;
   };
  
@@ -138,7 +134,7 @@ import {
   };
 
   const handleUpdateCourses = (newCourse) => {
-    // Voeg de nieuwe cursus toe aan de lijst met cursussen of voer andere logica uit om de cursus bij te werken
+    // Voegt de nieuwe cursus toe aan de lijst met cursussen of voert andere logica uit om de cursus bij te werken
     const updatedCourses = [...courses, newCourse];
     setCourses(updatedCourses);
     setNotification("Cursus succesvol toegevoegd/verwijderd");
@@ -155,7 +151,7 @@ import {
       });
 
       if (response.ok) {
-        // Verwijder de cursus uit de lijst
+        // Verwijdert de cursus uit de lijst
         setCourses((prevCourses) => prevCourses.filter((course) => course.id !== courseId));
         setSelectedCourse(null);
         handleShowNotification("Cursus succesvol verwijderd", "success");
@@ -194,7 +190,7 @@ import {
                 <ul>
                   <li>Controleer de spelling van je zoekopdracht</li>
                   <li>Probeer een andere zoekopdracht</li>
-                  <li>Ga naar de pagina klantenservice.</li>
+                  <li>Ga naar informatie en contact</li>
                 </ul>
               </AlertDescription>
             </Alert>
@@ -252,9 +248,11 @@ import {
                     <strong>Omschrijving:</strong> {course.description || "Informatie niet beschikbaar"}
                   </Text>
                   <Text>
+                  <TimeIcon marginRight="5px" />
                     <strong>Starttijd:</strong> {course.startTime || "Informatie niet beschikbaar"}
                   </Text>
                   <Text>
+                  <TimeIcon marginRight="5px" />
                     <strong>Eindtijd:</strong> {course.endTime || "Informatie niet beschikbaar"}
                   </Text>
                   <Text>
@@ -265,14 +263,12 @@ import {
     </Text>
     {course.instructor?.image && (
   <Image
-    boxSize="50px"  // Set the desired size
+    boxSize="50px"  
     src={course.instructor?.image}
     alt={course.instructor?.name}
     style={styles.imageInstrutor}
   />
-  
 )}
-
                 {course.id === selectedCourse?.id ? (
                   <CourseDetail key={course.id} courseId={course.id} /> 
                 ) : (
@@ -292,22 +288,22 @@ import {
             ))}
             </Flex>
           </VStack>
-         
-          {/* Display the selected course details */}
           {selectedCourse && (
             <Box mt={4}>
               <Heading fontSize="xl">Geselecteerde Cursus</Heading>
               <CourseDetail course={selectedCourse} />
             </Box>
           )}
-
-  <Navigation setFormOpen={setFormOpen} handleAddCourseClick={handleAddCourseClick}/>
-<Box style={{ ...styles.box, display: 'flex', justifyContent: 'space-between', flexDirection: 'column', alignItems: 'flex-start' }}>
-  <Button colorScheme="blue" variant="outline" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+<Box style={{ ...styles.box, display: 'flex', justifyContent: 'space-between', flexDirection: 'column', alignItems: 'center', marginTop: '20px' }}>
+  <Button colorScheme="blue" variant="outline" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ marginBottom: '20px' }}>
     <Text mr={2}>Terug naar boven</Text>
     <ArrowUpIcon ml="auto" />
   </Button>
 </Box>
+  <Navigation setFormOpen={setFormOpen} handleAddCourseClick={handleAddCourseClick}/>
+<Box style={{ ...styles.box, display: 'flex', justifyContent: 'space-between', flexDirection: 'column', alignItems: 'flex-start' }}>
+</Box>
+<Footer /> 
         </Box>
         {isFormOpen && (
           <AddCourse
@@ -317,29 +313,10 @@ import {
            handleAddCourseClick={handleAddCourseClick}  />
 
         )}
-    
+         
     </Center>
+   
   );
 };
 
 export default CoursesPage;
-
-
-
-
-//We would like to display a list of all courses in <coursesPage/>. Start by retrieving all the courses from the back-end using a query.
-
-//Display the fetched courses on the users’ screen.
-
-//Add the following details when displaying an course: title, description, image, startTime & endTime, categories
-
-//Make an course item clickable that leads the user to a separate course page by using React Router.
-
-//Add an “Add course” button that either opens a pop-up/modal or leads you to a new screen where you can add new courses by using a form.
-
-//Connect the add courses feature with the back-end so that new courses get uploaded to the server as well. 
-
-//Add a Search Function. We want a way for users to search for specific courses on the page that displays all the courses.
-
-//Add a Filter Function. We need a feature that lets users filter the displayed results based on different categories.
-
