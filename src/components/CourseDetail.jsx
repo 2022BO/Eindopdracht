@@ -1,5 +1,4 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Image, VStack, Text, HStack, Button } from '@chakra-ui/react';
 import { TimeIcon } from '@chakra-ui/icons';
 import { Link, useParams } from 'react-router-dom';
@@ -44,16 +43,14 @@ export const CourseDetail = () => {
     };
   }, [courseId]);
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+  
 
   if (error) {
     return <p>{error}</p>;
   }
 
   if (!course) {
-    return <p>Course not found</p>;
+    return null;
   }
 
   const { title, description, image, categories, startTime, endTime, instructor, location, prijs, website, quote } = course;
@@ -122,7 +119,9 @@ export const CourseDetail = () => {
   );
 };
 
-export default styles;
+
+
+
 
 
 

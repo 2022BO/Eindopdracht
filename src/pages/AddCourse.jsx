@@ -1,31 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import styles from './StylePage';
-import Footer from '../components/Footer';
-import {
-  Box,
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Heading,
-  FormControl,
-  FormLabel,
-  FormHelperText,
-  Textarea,
-  Text,
-  Input,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  ModalCloseButton,
-} from "@chakra-ui/react";
+import { Box, Button, Card, CardHeader, CardBody, CardFooter, Heading, FormControl, FormLabel, FormHelperText, Textarea, Text, Input, Image, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, ModalCloseButton } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
-
+import Footer from '../components/Footer';
 
 const AddCourse = ({ handleUpdateCourses }) => {
   const navigate = useNavigate();
@@ -34,13 +11,6 @@ const AddCourse = ({ handleUpdateCourses }) => {
   }
   const toast = useToast();
   const styles = {
-    pageContainer: {
-      background: 'linear-gradient(to right, #3498db, #2ecc71)',
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '20px',
-    },
     modalContent: {
       background: 'linear-gradient(to right, #3498db, #2ecc71)',
       color: '#fff',
@@ -70,7 +40,6 @@ const AddCourse = ({ handleUpdateCourses }) => {
       isClosable: true,
     });
   };
-
 
   const handleSaveChanges = async () => {
     try {
@@ -131,8 +100,6 @@ const AddCourse = ({ handleUpdateCourses }) => {
       }
     } catch (error) {
       console.error('Error adding course:', error);
-
-      // Check if there is a specific error message from the server
       const errorMessage = error.message || 'Oops! Er ging iets mis.';
 
       // Toon een fout-toast
@@ -146,21 +113,28 @@ const AddCourse = ({ handleUpdateCourses }) => {
     }
   };
   const handleNavigation = () => {
-    
     navigate('/add-course-form');
   };
 
   return (
     <Box style={styles.pageContainer}>
- <Card align='center' style={styles.box}>
+ <Card align='center' style={{...styles.box, marginBottom: '10px' }}>
   <CardHeader>
   <Heading size='md' style={styles.heading}>
   Cursus Aanmelden
         </Heading>
   </CardHeader>
+  <Box mb="1" style={{ display: 'flex', justifyContent: 'center' }}>
+    <Image
+      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRITBUgze1LUFdU2yYAkcZ5C0td8NpWLEm9TvVHYfptuXPOzPt8nbik1E1fS-d-B2EmYSY&usqp=CAU"
+      alt="krijttekening in een les"
+      style={styles.imageStyle}
+    />
+    </Box>
   <CardBody>
     <Text> Vul het onderstaande formulier in om je cursus aan te melden. We nemen contact met je op voor verdere details en goedkeuring.</Text>
     <Text> Als je meer informatie wil over je de cursus kan toevoegen kijk bij de Informatie contact pagina </Text>
+   
   </CardBody>
   <CardFooter>
   <Button
@@ -180,6 +154,7 @@ const AddCourse = ({ handleUpdateCourses }) => {
   </Button>
 </CardFooter>
 </Card>
+
 {isFormOpen && (
   <Modal isOpen={true} onClose={() => setFormOpen(false)}>
     <ModalOverlay />
