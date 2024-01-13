@@ -56,7 +56,7 @@ const CoursesPage = ({}) => {
   }, [data]);
 
   useEffect(() => {
-    fetch('/events.json')
+    fetch('/courses.json')
       .then((response) => response.json())
       .then((jsonData) => {
         console.log('Received data:', jsonData);
