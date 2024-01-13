@@ -172,7 +172,6 @@ const CoursesPage = ({}) => {
   const filteredCoursesByCategory = filteredCourses.filter(filterByCategory);
 
   return (
-   
     <Center h="100%" flexDir="column" style={{ ...styles.pageContainer }}>
       <Box style={styles.box}>
         <Heading style={styles.heading}>Leren & Ontwikkelen in de GGZ</Heading>
@@ -255,39 +254,40 @@ const CoursesPage = ({}) => {
         <strong>Categorieën:</strong> {course.categories ? course.categories.join(', ') : 'N/A'}
       </Text>
       <Text>
-        <strong>Docent:</strong> {course.instructor?.name || "Informatie niet beschikbaar"}
-      </Text>
-      {course.instructor?.image && (
-        <Image
-          boxSize="50px"
-          src={course.instructor?.image}
-          alt={course.instructor?.name}
-          style={styles.imageInstrutor} />
-      )}
-    </Box>
-  
-    <Box style={{ ...styles.box, display: 'flex', justifyContent: 'space-between', flexDirection: 'column', alignItems: 'flex-start' }}></Box>
-    <Box mt={1} style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
-      <Link to={`/course/${course.id}`}>
-        <Button colorScheme="blue" variant="outline" mr={2}>
-          Selecteer
-        </Button>
-      </Link>
+  <strong>Docent:</strong> {course.instructor?.name || "Informatie niet beschikbaar"}
+</Text>
+<Box mb={2} style={{ marginBottom: '50px' }}>
+  <Text>
+    {course.instructor?.image && (
+      <Image
+        boxSize="50px"
+        src={course.instructor?.image}
+        alt={course.instructor?.name}
+        style={styles.imageInstrutor}
+      />
+    )}
+  </Text>
+  <Box mt={1} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', position: 'absolute', bottom: 8, width: '85%' }}>
+  <Link to={`/course-page/${course.id}`} style={{ flex: '1' }}>
+    <Button colorScheme="blue" variant="outline" mr={2} height="30px">
+      Selecteer
+    </Button>
+  </Link>
 
-      <Button
-        colorScheme="red"
-        variant="outline"
-        onClick={() => handleDeleteCourse(course.id)}
-      >
-        Verwijder
-      </Button>
+  <Button
+    colorScheme="red"
+    variant="outline"
+    onClick={() => handleDeleteCourse(course.id)}
+    height="30px"
+  >
+    Verwijder
+  </Button>
+</Box>
+</Box>
+</Box>
     </Box>
-    <Box style={{ ...styles.box, display: 'flex', justifyContent: 'space-between', flexDirection: 'column', alignItems: 'flex-start' }}></Box>
-  </Box>
-  </React.Fragment>
-
-  
-))}   
+    </React.Fragment>
+))}
           </Flex>
         </VStack>
         {selectedCourse && (
@@ -306,6 +306,7 @@ const CoursesPage = ({}) => {
             marginTop: '20px',
           }}
         >
+          
           <Button colorScheme="blue" variant="outline" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ marginBottom: '20px' }}>
             <Text mr={2}>Terug naar boven</Text>
             <ArrowUpIcon ml="auto" />

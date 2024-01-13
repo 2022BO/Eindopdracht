@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Image, VStack, Text, HStack, Button } from '@chakra-ui/react';
 import { TimeIcon } from '@chakra-ui/icons';
-import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styles from '../pages/StylePage';
 
 export const CourseDetail = () => {
@@ -112,18 +111,11 @@ export const CourseDetail = () => {
         <Text fontSize="xl" fontWeight="bold">
       Schrijf je nu in:
     </Text>
-    <div>
-    <Button
-      onClick={() => window.location.href = 'mailto:inschrijvingcursus@fakeEmail.nl'}
-      colorScheme="blue"
-      variant="outline"
-      mt={2}
-      mr={2}
-      mb={2}
-    >
-      inschrijvingcursus@fakeEmail.nl
-    </Button>
-  </div>
+    <div onClick={() => window.location.href = 'mailto:inschrijvingcursus@fakeEmail.nl'}>
+  <Button colorScheme="blue" variant="outline" mt={2} mr={2} mb={2}>
+    inschrijvingcursus@fakeEmail.nl
+  </Button>
+</div>
   </Box>
 </Link>
   );

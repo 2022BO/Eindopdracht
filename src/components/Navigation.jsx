@@ -21,9 +21,9 @@ export const Navigation = ({ courseId}) => {
       <Link to="/" style={{ ...linkStyle,}}>
         Cursuscatalogus
       </Link>
-      <Link to={`/event/${courseId}`} style={{ ...linkStyle, marginLeft: '20px' }}>
-      Cursus Aanmelden
-      </Link>
+<Link to={`/course/${courseId || 'fallbackId'}`} style={{ ...linkStyle, marginLeft: '20px' }}>
+  Cursus Aanmelden
+</Link>
       <Link to="/information-and-contact" style={{ ...linkStyle, marginLeft: '20px' }}>
       Informatie & contact
       </Link>

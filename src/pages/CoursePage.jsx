@@ -4,7 +4,7 @@ import styles from './StylePage';
 import AddCourse from './AddCourse';
 import { CourseDetail } from '../components/CourseDetail';
 
-export const EventPage = () => {
+export const CoursePage = () => {
   const [editMode, setEditMode] = useState(false);
   const [editedData, setEditedData] = useState({});
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -127,11 +127,12 @@ export const EventPage = () => {
               data={selectedCourse}
             />
           )}
+          
         </Container>
       </Box>
     </div>
   );
 };
 
-export default EventPage;
+export default CoursePage;
 
