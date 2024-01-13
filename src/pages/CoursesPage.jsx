@@ -106,6 +106,7 @@ const CoursesPage = ({}) => {
   const handleCourseSelection = (course) => {
     try {
       setSelectedCourse(course);
+      console.log('Selected Category:', selectedCategory);
     } catch (error) {
       console.error('Error selecting course:', error);
     }
@@ -197,7 +198,7 @@ const CoursesPage = ({}) => {
           <Select
             placeholder="Filter op categorie"
             value={selectedCategory}
-            onChange={handleCourseSelection}
+            onChange={(e) => setSelectedCategory(e.target.value)}
           >
             <option value="">Alle categorieën</option>
             {data &&
